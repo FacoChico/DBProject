@@ -8,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 
 @Controller
@@ -50,4 +54,27 @@ public class AddController {
 
         return "redirect:/";
     }
+
+    @GetMapping("/client{id}")
+    public String viewCard(@PathVariable(value = "id") long id, Model model) {
+
+        // Тут проверка на то, чтобы нельзя было ввести в поле ссылки номер не существующей страницы
+        if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
+            return "redirect:/";
+        }
+
+        Optional<Client> client = clientRepository.findById(id); // ТУТ СДЕЛАНО ПОКА ЧТО ТОЛЬКО С ОСНОВНОЙ ЧАСТЬЮ
+        ArrayList<Client> res = new ArrayList<>();
+        client.ifPresent(res::add);
+        model.addAttribute("client", res);
+
+        Optional<AdditionalClientInfo> additionalClientInfo = additionalClientInfoRepository.findById(id);
+        ArrayList<AdditionalClientInfo> res2 = new ArrayList<>();
+        additionalClientInfo.ifPresent(res2::add);
+        model.addAttribute("additionalClientInfo", res2);
+
+        return "client-card";
+
+    }
+
 }
