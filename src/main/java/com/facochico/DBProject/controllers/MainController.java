@@ -17,4 +17,10 @@ public class MainController {
         model.addAttribute("title", "О приложении");
         return "about";
     }
+
+    @GetMapping("/info")
+    public String info(Model model) {
+        model.addAttribute("title", "Информация");
+        return "info";
+    }
 }

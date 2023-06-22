@@ -17,14 +17,13 @@
 //    private String surname;
 //    private String phoneNumber;
 //    private String BDay;
-//    private String email;
 //
-//    public Client(String name, String patronymic, String surname, String phoneNumber, String email) {
+//    public Client(String name, String patronymic, String surname, String phoneNumber, String BDay) {
 //        this.name = name;
 //        this.patronymic = patronymic;
 //        this.surname = surname;
 //        this.phoneNumber = phoneNumber;
-//        this.email = email;
+//        this.BDay = BDay;
 //    }
 //
 //    public Client() {}
@@ -77,11 +76,5 @@
 //        this.BDay = BDay;
 //    }
 //
-//    public String getEmail() {
-//        return email;
-//    }
 //
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
 //}
