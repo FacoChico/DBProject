@@ -77,4 +77,59 @@ public class AddController {
 
     }
 
+    @GetMapping("/client{id}/edit")
+    public String clientEdit(@PathVariable(value = "id") long id, Model model) {
+        if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
+            return "redirect:/";
+        }
+
+        Optional<Client> client = clientRepository.findById(id);
+        ArrayList<Client> res = new ArrayList<>();
+        client.ifPresent(res::add);
+        model.addAttribute("client", res);
+
+        Optional<AdditionalClientInfo> additionalClientInfo = additionalClientInfoRepository.findById(id);
+        ArrayList<AdditionalClientInfo> res2 = new ArrayList<>();
+        additionalClientInfo.ifPresent(res2::add);
+        model.addAttribute("additionalClientInfo", res2);
+
+        return "card-edit";
+    }
+
+    @PostMapping("/client{id}/edit")
+    public String clientUpdate(@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String patronymic,
+                               @RequestParam String surname, @RequestParam String phoneNumber,
+                               @RequestParam String bDay, @RequestParam String footSize,
+                               @RequestParam String clothSize, @RequestParam String lastMsg,
+                               @RequestParam String description, Model model) {
+
+        Client client = clientRepository.findById(id).orElseThrow(); // orElseThrow() выбрасывает исключение в случае, если запись была не найдена
+
+        client.setName(name);
+        client.setSurname(surname);
+        client.setPatronymic(patronymic);
+        client.setPhoneNumber(phoneNumber);
+        client.setBDay(bDay);
+        clientRepository.save(client);
+
+        AdditionalClientInfo additionalClientInfo = additionalClientInfoRepository.findById(id).orElseThrow();
+
+        additionalClientInfo.setClothSize(clothSize);
+        additionalClientInfo.setFootSize(footSize);
+        additionalClientInfo.setLastMsg(lastMsg);
+        additionalClientInfo.setDescription(description);
+        additionalClientInfoRepository.save(additionalClientInfo);
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/client{id}/remove")
+    public String remove(@PathVariable(value = "id") long id, Model model) {
+
+        Client client = clientRepository.findById(id).orElseThrow();
+        clientRepository.delete(client);
+
+        return "redirect:/";
+    }
+
 }

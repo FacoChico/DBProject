@@ -30,6 +30,12 @@
 <div class="container mt-4">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
+<!--            <a th:href="'/blog/' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>-->
+<!--            <form th:action="'/blog/' + ${el.id} + '/remove'" method="post">  &lt;!&ndash; Обработка данной формы будет происходить по указанному адресу &ndash;&gt;-->
+<!--                <button class="btn btn-warning" type="submit" >Удалить</button> &lt;!&ndash; Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер &ndash;&gt;-->
+<!--            </form>-->
+
+
             <div class="square"></div>
         </div>
         <div class="col-md-7 col-lg-8">
@@ -40,6 +46,7 @@
                     <div class="col-sm-6">
                         <div th:each="el : ${client}">
                             <h3 th:text="${el.name} + ' ' + ${el.patronymic} + ' ' + ${el.surname}"/>
+                            <a th:href="'/client' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
                         </div>
                     </div>
                 </div>
@@ -65,31 +72,6 @@
                 </div>
 
                 <hr class="my-4">
-
-<!--                <div class="row g-3">-->
-<!--                    <div class="col-sm-6">-->
-<!--                        <label for="foot_size" class="form-label">Размер обуви</label>-->
-<!--                        <input type="text" name="footSize" class="form-control" id="foot_size">-->
-<!--                    </div>-->
-
-<!--                    <div class="col-sm-6">-->
-<!--                        <label for="clothe_size" class="form-label">Размер одежды</label>-->
-<!--                        <input type="text" name="clothSize" class="form-control" id="clothe_size">-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <hr class="my-4">-->
-
-<!--                <div class="col-sm-6">-->
-<!--                    <label for="last_message_date" class="form-label">Дата последнего сообщения</label>-->
-<!--                    <input type="date" name="lastMsg" class="form-control" id="last_message_date">-->
-<!--                </div>-->
-
-<!--                <hr class="my-4">-->
-
-<!--                <h4 class="mb-3">Общее описание</h4>-->
-<!--                <textarea name="description" class="form-control" rows="10"></textarea><br>-->
-
             </form>
         </div>
     </div>
