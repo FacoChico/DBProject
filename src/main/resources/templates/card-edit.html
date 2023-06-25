@@ -35,88 +35,81 @@
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Основная информация</h4>
             <form class="needs-validation" novalidate="" method="post">
+                <div th:each="el : ${client}">
+                    <div class="row g-3">
 
-                <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">Имя</label>
+                            <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName"  value="" required="">
+                            <div class="invalid-feedback">
+                                Введите корректное имя
+                            </div>
+                        </div>
 
-                    <div class="col-sm-6">
-                        <label for="firstName" class="form-label">Имя</label>
-                        <input type="text" name="name" class="form-control" id="firstName"  value="" required="">
-                        <div class="invalid-feedback">
-                            Введите корректное имя
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Фамилия</label>
+                            <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" placeholder="" value="" required="">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="patronymic" class="form-label">Отчество</label>
+                            <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" placeholder="" value="" required="">
+                        </div>
+
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="phoneNumber" class="form-label">Номер телефона</label>
+                            <input type="text" th:value="${el.phoneNumber}" name="phoneNumber" class="form-control" id="phoneNumber" placeholder="" value="" required="">
+
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="birthDay" class="form-label">Дата рождения</label>
+                            <input type="date" th:value="${el.bDay}" name="bDay" class="form-control" id="birthDay">
                         </div>
                     </div>
-
-                    <div class="col-sm-6">
-                        <label for="lastName" class="form-label">Фамилия</label>
-                        <input type="text" name="surname" class="form-control" id="lastName" placeholder="" value="" required="">
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label for="patronymic" class="form-label">Отчество</label>
-                        <input type="text" name="patronymic" class="form-control" id="patronymic" placeholder="" value="" required="">
-                    </div>
-
-
                 </div>
 
                 <hr class="my-4">
 
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label for="phoneNumber" class="form-label">Номер телефона</label>
-                        <input type="text" name="phoneNumber" class="form-control" id="phoneNumber" placeholder="" value="" required="">
-
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label for="birthDay" class="form-label">Дата рождения</label>
-                        <input type="date" name="bDay" class="form-control" id="birthDay">
-                    </div>
-
-                </div>
-
-                <hr class="my-4">
-
-                <div class="row g-3">
+                <div class="row g-3" th:each="el : ${additionalClientInfo}">
                     <div class="col-sm-6">
                         <label for="foot_size" class="form-label">Размер обуви</label>
-                        <input type="text" name="footSize" class="form-control" id="foot_size">
+                        <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="foot_size">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="clothe_size" class="form-label">Размер одежды</label>
-                        <input type="text" name="clothSize" class="form-control" id="clothe_size">
+                        <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothe_size">
                     </div>
-                </div>
 
-                <hr class="my-4">
+                    <hr class="my-4">
 
-                <div class="col-sm-6">
-                    <label for="last_message_date" class="form-label">Дата последнего сообщения</label>
-                    <input type="date" name="lastMsg" class="form-control" id="last_message_date">
-                </div>
+                    <div class="col-sm-6">
+                        <label for="last_message_date" class="form-label">Дата последнего сообщения</label>
+                        <input type="date" th:value="${el.lastMsg}" name="lastMsg" class="form-control" id="last_message_date">
+                    </div>
 
-                <hr class="my-4">
+                    <hr class="my-4">
 
-                <h4 class="mb-3">Общее описание</h4>
-                <textarea name="description" class="form-control" rows="10"></textarea><br>
-
-                <div class="row gy-3">
-
+                    <h4 class="mb-3">Общее описание</h4>
+                    <textarea name="description" th:text="${el.description}" class="form-control" rows="10"></textarea><br>
                 </div>
 
                 <hr class="my-4">
 
                 <button class="w-100 btn btn-lg bg-pink" style="background: #ffbe93" type="submit">Обновить</button>
-
-                <div th:each="el : ${client}">
-                    <form th:action="'/client' + ${el.id} + '/remove'" method="post">  <!-- Обработка данной формы будет происходить по указанному адресу -->
-                        <button class="btn btn-warning" type="submit" >Удалить</button> <!-- Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер -->
-                    </form>
-                </div>
-
-
             </form>
+            <div th:each="el : ${client}">
+                <form th:action="'/client' + ${el.id} + '/remove'" method="post">  <!-- Обработка данной формы будет происходить по указанному адресу -->
+                    <button class="btn btn-warning" type="submit" >Удалить</button> <!-- Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер -->
+                </form>
+            </div>
         </div>
     </div>
 </div>

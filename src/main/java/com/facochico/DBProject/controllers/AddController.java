@@ -43,9 +43,9 @@ public class AddController {
     @PostMapping("/add")
     public String addClient(@RequestParam String name, @RequestParam String patronymic,
                             @RequestParam String surname, @RequestParam String phoneNumber,
-                            @RequestParam String bDay, @RequestParam String footSize,
-                            @RequestParam String clothSize, @RequestParam String lastMsg,
-                            @RequestParam String description, Model model) {
+                            @RequestParam String bDay, @RequestParam String clothSize,
+                            @RequestParam String footSize,  @RequestParam String lastMsg,
+                            @RequestParam String description,  Model model) {
         Client client = new Client(name, patronymic, surname, phoneNumber, bDay);
         clientRepository.save(client);
 
@@ -63,7 +63,7 @@ public class AddController {
             return "redirect:/";
         }
 
-        Optional<Client> client = clientRepository.findById(id); // ТУТ СДЕЛАНО ПОКА ЧТО ТОЛЬКО С ОСНОВНОЙ ЧАСТЬЮ
+        Optional<Client> client = clientRepository.findById(id);
         ArrayList<Client> res = new ArrayList<>();
         client.ifPresent(res::add);
         model.addAttribute("client", res);
@@ -79,7 +79,7 @@ public class AddController {
 
     @GetMapping("/client{id}/edit")
     public String clientEdit(@PathVariable(value = "id") long id, Model model) {
-        if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
+        if (!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
             return "redirect:/";
         }
 
@@ -99,8 +99,8 @@ public class AddController {
     @PostMapping("/client{id}/edit")
     public String clientUpdate(@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String patronymic,
                                @RequestParam String surname, @RequestParam String phoneNumber,
-                               @RequestParam String bDay, @RequestParam String footSize,
-                               @RequestParam String clothSize, @RequestParam String lastMsg,
+                               @RequestParam String bDay, @RequestParam String clothSize,
+                               @RequestParam String footSize,  @RequestParam String lastMsg,
                                @RequestParam String description, Model model) {
 
         Client client = clientRepository.findById(id).orElseThrow(); // orElseThrow() выбрасывает исключение в случае, если запись была не найдена
@@ -129,7 +129,9 @@ public class AddController {
         Client client = clientRepository.findById(id).orElseThrow();
         clientRepository.delete(client);
 
+        AdditionalClientInfo additionalClientInfo = additionalClientInfoRepository.findById(id).orElseThrow();
+        additionalClientInfoRepository.delete(additionalClientInfo);
+
         return "redirect:/";
     }
-
 }
