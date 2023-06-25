@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Controller
 public class AddController {
-
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
@@ -74,7 +73,6 @@ public class AddController {
         model.addAttribute("additionalClientInfo", res2);
 
         return "client-card";
-
     }
 
     @GetMapping("/client{id}/edit")
