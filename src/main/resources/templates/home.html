@@ -30,7 +30,7 @@
 
                         <tbody>
                             <div th:each="el : ${clients}">
-                                <tr th:clientHref="'client' + ${el.id}">
+                                <tr th:clientHref="'client' + ${el.id}" style="cursor: pointer">
                                     <td th:text="${el.name} + ' ' + ${el.patronymic} + ' ' + ${el.surname}"/>
                                     <td th:text="${el.phoneNumber}"/>
                                 </tr>

@@ -101,20 +101,27 @@
                 <div class="row" th:each="el : ${additionalClientInfo}">
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3"></div>
+                    <div class="col-sm-3 col-sm-offset-3"></div>
 
                     <div class="col-sm-3">
                         <button class="w-100 btn btn-lg bg-pink" style="background: aquamarine" type="submit">Обновить</button>
                     </div>
-
-                    <div class="col-sm-3">
-                        <div th:each="el : ${client}">
-                            <form th:action="'/client' + ${el.id} + '/remove'" method="post">  <!-- Обработка данной формы будет происходить по указанному адресу -->
-                                <button class="jopa w-100 btn btn-lg" style="background: #ff574b" type="submit" >Удалить</button> <!-- Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер -->
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </form>
+
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3 col-sm-offset-3"></div>
+                <div class="col-sm-3 col-sm-offset-3"></div>
+
+                <div class="col-sm-3 col-sm-offset-3">
+                    <div th:each="el : ${client}">
+                        <form th:action="'/client' + ${el.id} + '/remove'" method="post">  <!-- Обработка данной формы будет происходить по указанному адресу -->
+                            <button class="jopa w-100 btn btn-lg" style="background: #ff574b" type="submit" >Удалить</button> <!-- Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер -->
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

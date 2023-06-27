@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Client {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -76,6 +75,4 @@ public class Client {
     public void setBDay(String bDay) {
         this.bDay = bDay;
     }
-
-
 }
