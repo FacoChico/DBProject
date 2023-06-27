@@ -86,7 +86,7 @@
                                 <tbody>
 
                                 <div th:each="el : ${clientOrder}">
-                                    <tr th:clientHref="'client' + ${el.clientId}">
+                                    <tr th:clientHref="'client' + ${el.clientId} + '/order' + ${el.id}">
                                         <td th:text="${el.category}"/>
                                         <td th:text="${el.brand}"/>
                                     </tr>

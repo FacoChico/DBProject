@@ -40,7 +40,7 @@ public class ClientController {
     @GetMapping("/add")
     public String addClientMapping(Model model) {
         model.addAttribute("title", "Создание карточки");
-        return "add";
+        return "client-add";
     }
 
     @PostMapping("/add")
@@ -98,7 +98,7 @@ public class ClientController {
         additionalClientInfo.ifPresent(res2::add);
         model.addAttribute("additionalClientInfo", res2);
 
-        return "card-edit";
+        return "client-card-edit";
     }
 
     @PostMapping("/client{id}/edit")
@@ -125,7 +125,7 @@ public class ClientController {
         additionalClientInfo.setDescription(description);
         additionalClientInfoRepository.save(additionalClientInfo);
 
-        return "redirect:/";
+        return "redirect:/client{id}";
     }
 
     @PostMapping("/client{id}/remove")

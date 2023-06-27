@@ -1,6 +1,8 @@
 package com.facochico.DBProject.controllers;
 
+import com.facochico.DBProject.models.Client;
 import com.facochico.DBProject.models.ClientOrder;
+import com.facochico.DBProject.repo.ClientRepository;
 import com.facochico.DBProject.repo.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,11 +19,13 @@ import java.util.Optional;
 public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/client{clientId}/new-order")
     public String newOrderMapping(@PathVariable(value = "clientId") Long clientId, Model model) {
         model.addAttribute("title", "Создание заказа");
-        return "new-order";
+        return "order-add";
     }
 
     @PostMapping("/client{clientId}/new-order")
@@ -44,10 +48,15 @@ public class OrderController {
             return "redirect:/";
         }
 
+        Optional<Client> client = clientRepository.findById(clientId);
+        ArrayList<Client> res = new ArrayList<>();
+        client.ifPresent(res::add);
+        model.addAttribute("client", res);
+
         Optional<ClientOrder> order = orderRepository.findById(orderId);
-        ArrayList<ClientOrder> res = new ArrayList();
-        order.ifPresent(res::add);
-        model.addAttribute("order", res);
+        ArrayList<ClientOrder> res2 = new ArrayList();
+        order.ifPresent(res2::add);
+        model.addAttribute("order", res2);
 
         return "order-card";
     }
