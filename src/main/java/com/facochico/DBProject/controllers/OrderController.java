@@ -1,5 +1,6 @@
 package com.facochico.DBProject.controllers;
 
+import com.facochico.DBProject.models.AdditionalClientInfo;
 import com.facochico.DBProject.models.Client;
 import com.facochico.DBProject.models.ClientOrder;
 import com.facochico.DBProject.repo.ClientRepository;
@@ -59,5 +60,48 @@ public class OrderController {
         model.addAttribute("order", res2);
 
         return "order-card";
+    }
+
+    @GetMapping("/client{clientId}/order{orderId}/edit")
+    public String orderEdit(@PathVariable(value = "orderId") Long orderId, Model model) {
+
+        if(!orderRepository.existsById(orderId)) {
+            return "redirect:/";
+        }
+
+        Optional<ClientOrder> order = orderRepository.findById(orderId);
+        ArrayList<ClientOrder> res = new ArrayList();
+        order.ifPresent(res::add);
+        model.addAttribute("order", res);
+
+        return "order-card-edit";
+    }
+
+    @PostMapping("/client{clientId}/order{orderId}/edit")
+    public String orderUpdate(@PathVariable(value = "orderId") Long orderId,
+                              @RequestParam String category, @RequestParam String brand,
+                              @RequestParam String size, @RequestParam String orderDate,
+                              @RequestParam String description) {
+
+        ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
+
+        clientOrder.setCategory(category);
+        clientOrder.setBrand(brand);
+        clientOrder.setSize(size);
+        clientOrder.setOrderDate(orderDate);
+        clientOrder.setDescription(description);
+
+        orderRepository.save(clientOrder);
+
+        return "redirect:/client{clientId}/order{orderId}";
+    }
+
+    @PostMapping("/client{clientId}/order{orderId}/remove")
+    public String orderDelete(@PathVariable(value = "orderId") Long orderId) {
+
+        ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
+        orderRepository.delete(clientOrder);
+
+        return "redirect:/";
     }
 }

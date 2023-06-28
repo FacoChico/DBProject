@@ -129,7 +129,7 @@ public class ClientController {
     }
 
     @PostMapping("/client{id}/remove")
-    public String remove(@PathVariable(value = "id") long id) {
+    public String clientDelete(@PathVariable(value = "id") long id) {
 
         Client client = clientRepository.findById(id).orElseThrow();
         clientRepository.delete(client);
