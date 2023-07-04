@@ -1,6 +1,7 @@
 package com.facochico.DBProject.models;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -12,6 +13,7 @@ public class AdditionalClientInfo {
     private String clothSize;
     private String footSize;
     private String lastMsg;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     public AdditionalClientInfo(Long id, String clothSize, String footSize, String lastMsg, String description) {

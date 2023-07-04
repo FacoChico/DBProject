@@ -27,7 +27,9 @@
 <div class="container mt-4">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <div class="square"></div>
+            <input id="fileUpload" type="file" name="fileupload" />
+            <button id="upload-button" onclick="previewImage();"> Upload </button>
+            <img id="image" style="display:none" class="img img-thumbnail">
         </div>
 
         <div class="col-md-7 col-lg-8">
@@ -97,10 +99,47 @@
 
                 <hr class="my-4">
 
-                <button class="w-100 btn btn-lg" style="background: #ffbe93" type="submit">Добавить клиента</button>
+                <button class="w-100 btn btn-lg" style="background: #ffbe93" type="submit" onclick="uploadFile();">Добавить клиента</button>
             </form>
         </div>
     </div>
+
+    <script>
+        async function uploadFile() {
+            let formData = new FormData();
+            formData.append("file", fileUpload.files[0]);
+            let response = await fetch('/upload', {
+                method: "POST",
+                body: formData
+            });
+        }
+    </script>
+
+    <script>
+        function previewImage() {
+            // Получаем ссылку на элемент input, который содержит загруженное изображение
+            let input = document.getElementById('fileUpload');
+
+            // Получаем ссылку на элемент img, который будет отображать изображение
+            let preview = document.getElementById('image');
+
+            // Создаем объект FileReader для чтения содержимого файла
+            let reader = new FileReader();
+
+            // Устанавливаем обработчик события onload, который будет вызван, когда файл будет успешно прочитан
+            reader.onload = function() {
+                // Устанавливаем путь к загруженному изображению в атрибут src элемента img
+                preview.src = reader.result;
+
+                // Отображаем элемент img
+                preview.style.display = 'block';
+            }
+
+            // Читаем содержимое выбранного файла, заданным в input
+            reader.readAsDataURL(input.files[0]);
+        }
+    </script>
+
 </div>
 
 <!-- Футер страницы -->

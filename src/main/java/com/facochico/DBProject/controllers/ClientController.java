@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -49,17 +52,35 @@ public class ClientController {
                             @RequestParam String bDay, @RequestParam String clothSize,
                             @RequestParam String footSize,  @RequestParam String lastMsg,
                             @RequestParam String description) {
+
         Client client = new Client(name, patronymic, surname, phoneNumber, bDay);
         clientRepository.save(client);
 
         AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), clothSize, footSize, lastMsg, description);
         additionalClientInfoRepository.save(additionalClientInfo);
 
+        String resourcePath = Paths.get("src" + File.separator + "main" + File.separator + "resources"
+                + File.separator + "static" + File.separator + "images").toAbsolutePath().toString() + File.separator;
+
+        File file = new File(resourcePath + "newImage");
+        File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
+        if(file.renameTo(newFile)){
+            System.out.println("Файл переименован успешно");;
+        }else{
+            System.out.println("Файл не был переименован");
+        }
+
         return "redirect:/";
     }
 
     @GetMapping("/client{id}")
     public String viewCard(@PathVariable(value = "id") long id, Model model) {
+
+        model.addAttribute("title", "Карточка клиента");
+
+        String photoPath = Paths.get("images") + File.separator + "client" + id + ".jpeg";
+
+        model.addAttribute("photoPath" , photoPath);
 
         // Проверка наличия в базе клиента и информации с данным id
         if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
@@ -136,6 +157,9 @@ public class ClientController {
 
         AdditionalClientInfo additionalClientInfo = additionalClientInfoRepository.findById(id).orElseThrow();
         additionalClientInfoRepository.delete(additionalClientInfo);
+
+        List<ClientOrder> clientOrders = orderRepository.findByClientId(id);
+        orderRepository.deleteAll(clientOrders);
 
         return "redirect:/";
     }

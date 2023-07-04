@@ -1,9 +1,7 @@
 package com.facochico.DBProject.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.springframework.stereotype.Controller;
 
 @Entity
 public class ClientOrder {
@@ -16,6 +14,7 @@ public class ClientOrder {
     private String brand;
     private String size;
     private String orderDate;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     public ClientOrder(Long clientId, String category, String brand, String size, String orderDate, String description) {
