@@ -22,8 +22,8 @@ public class FileUploadController {
     @PostMapping("/upload")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file ) {
 
-        String resourcesDir = Paths.get("src" + File.separator + "main" + File.separator
-                + "resources" + File.separator + "static" + File.separator + "images").toAbsolutePath() + File.separator;
+        String resourcesDir = Paths.get("target" + File.separator + "classes" + File.separator
+                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         try {
             file.transferTo( new File(resourcesDir + "newImage"));
         } catch (Exception e) {

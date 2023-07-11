@@ -59,8 +59,8 @@ public class ClientController {
         AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), clothSize, footSize, lastMsg, description);
         additionalClientInfoRepository.save(additionalClientInfo);
 
-        String resourcePath = Paths.get("src" + File.separator + "main" + File.separator + "resources"
-                + File.separator + "static" + File.separator + "images").toAbsolutePath().toString() + File.separator;
+        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
 
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
@@ -78,7 +78,7 @@ public class ClientController {
 
         model.addAttribute("title", "Карточка клиента");
 
-        String photoPath = Paths.get("images") + File.separator + "client" + id + ".jpeg";
+        String photoPath = Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
 
         model.addAttribute("photoPath" , photoPath);
 
