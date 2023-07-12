@@ -1,6 +1,6 @@
 package com.facochico.DBProject.controllers;
 
-import com.facochico.DBProject.models.AdditionalClientInfo;
+
 import com.facochico.DBProject.models.Client;
 import com.facochico.DBProject.models.ClientOrder;
 import com.facochico.DBProject.repo.ClientRepository;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -38,6 +40,12 @@ public class OrderController {
         ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, orderDate, description);
         orderRepository.save(clientOrder);
 
+        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+        File file = new File(resourcePath + "newImage");
+        File newFile = new File(resourcePath + "order" + clientOrder.getId() + ".jpeg");
+        file.renameTo(newFile);
+
         return "redirect:/client{clientId}";
     }
 
@@ -49,13 +57,19 @@ public class OrderController {
             return "redirect:/";
         }
 
+        String title = "Карточка заказа";
+        model.addAttribute("title", title);
+
+        String photoPath = File.separator + Paths.get("uploads") + File.separator + "order" + orderId + ".jpeg";
+        model.addAttribute("photoPath", photoPath);
+
         Optional<Client> client = clientRepository.findById(clientId);
         ArrayList<Client> res = new ArrayList<>();
         client.ifPresent(res::add);
         model.addAttribute("client", res);
 
         Optional<ClientOrder> order = orderRepository.findById(orderId);
-        ArrayList<ClientOrder> res2 = new ArrayList();
+        ArrayList<ClientOrder> res2 = new ArrayList<>();
         order.ifPresent(res2::add);
         model.addAttribute("order", res2);
 
@@ -69,8 +83,14 @@ public class OrderController {
             return "redirect:/";
         }
 
+        String title = "Редактирование карточки клиента";
+        model.addAttribute("title", title);
+
+        String photoPath = File.separator + Paths.get("uploads") + File.separator + "order" + orderId + ".jpeg";
+        model.addAttribute("photoPath", photoPath);
+
         Optional<ClientOrder> order = orderRepository.findById(orderId);
-        ArrayList<ClientOrder> res = new ArrayList();
+        ArrayList<ClientOrder> res = new ArrayList<>();
         order.ifPresent(res::add);
         model.addAttribute("order", res);
 
@@ -93,6 +113,12 @@ public class OrderController {
 
         orderRepository.save(clientOrder);
 
+        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+        File file = new File(resourcePath + "newImage");
+        File newFile = new File(resourcePath + "order" + orderId + ".jpeg");
+        file.renameTo(newFile);
+
         return "redirect:/client{clientId}/order{orderId}";
     }
 
@@ -101,6 +127,12 @@ public class OrderController {
 
         ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
         orderRepository.delete(clientOrder);
+
+        String photoPath = Paths.get("target" + File.separator + "classes" + File.separator
+                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator
+                + "order" + orderId + ".jpeg";
+        File userPhoto = new File(photoPath);
+        userPhoto.delete();
 
         return "redirect:/";
     }

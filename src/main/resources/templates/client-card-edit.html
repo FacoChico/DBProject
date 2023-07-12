@@ -2,15 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <style>
-    .square {
-        height: 100%;
-        width: 100%;
-        background-color: pink;
-    }
-
-    .form-control {
+   .form-control {
         resize: none;
-    }
+   }
 </style>
 
 <head>
@@ -28,7 +22,6 @@
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
             <img th:src="${photoPath}" onerror="this.src='/images/defaultImage.jpeg';" alt="sorry" class="rounded img-thumbnail">
-
             <input id="fileUpload" type="file" name="fileupload" />
             <button id="upload-button" onclick="previewImage();"> Upload </button>
             <img id="image" style="display:none" class="img img-thumbnail">
@@ -164,9 +157,6 @@
             reader.readAsDataURL(input.files[0]);
         }
     </script>
-
-
-
 </div>
 
 <!-- Футер страницы -->

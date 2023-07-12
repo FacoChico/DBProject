@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 
+
+
 @Controller
 public class ClientController {
     @Autowired
@@ -32,17 +34,21 @@ public class ClientController {
 
     @GetMapping("/")
     public String home(Model model) {
+
         model.addAttribute("title", "Главный экран");
+
         Iterable<Client> clients = clientRepository.findAll();
         Iterable<AdditionalClientInfo> additionalClientInfos = additionalClientInfoRepository.findAll();
         model.addAttribute("clients", clients);
         model.addAttribute("additionalClientInfos", additionalClientInfos);
+
         return "home";
     }
 
     @GetMapping("/add")
     public String addClientMapping(Model model) {
         model.addAttribute("title", "Создание карточки");
+
         return "client-add";
     }
 
@@ -71,15 +77,14 @@ public class ClientController {
     @GetMapping("/client{id}")
     public String viewCard(@PathVariable(value = "id") long id, Model model) {
 
+        if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
+            return "redirect:/";
+        }
+
         model.addAttribute("title", "Карточка клиента");
 
         String photoPath = File.separator + Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
         model.addAttribute("photoPath", photoPath);
-
-        // Проверка наличия в базе клиента и информации с данным id
-        if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
-            return "redirect:/";
-        }
 
         Optional<Client> client = clientRepository.findById(id);
         ArrayList<Client> res = new ArrayList<>();
@@ -99,6 +104,7 @@ public class ClientController {
 
     @GetMapping("/client{id}/edit")
     public String clientEdit(@PathVariable(value = "id") long id, Model model) {
+
         if (!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
             return "redirect:/";
         }
@@ -148,7 +154,7 @@ public class ClientController {
         String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         File file = new File(resourcePath + "newImage");
-        File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
+        File newFile = new File(resourcePath + "client" + id + ".jpeg");
         file.renameTo(newFile);
 
         return "redirect:/client{id}";
@@ -164,8 +170,28 @@ public class ClientController {
         additionalClientInfoRepository.delete(additionalClientInfo);
 
         List<ClientOrder> clientOrders = orderRepository.findByClientId(id);
+        deleteClientOrderPhotos(clientOrders);
         orderRepository.deleteAll(clientOrders);
 
+        String photoPath = Paths.get("target" + File.separator + "classes" + File.separator
+                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator
+                + "client" + id + ".jpeg";
+        File userPhoto = new File(photoPath);
+        userPhoto.delete();
+
         return "redirect:/";
+    }
+
+    void deleteClientOrderPhotos(List<ClientOrder> clientOrders) {
+        String photoPath;
+        File userPhoto;
+
+        for (ClientOrder order : clientOrders) {
+            photoPath = Paths.get("target" + File.separator + "classes" + File.separator
+                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator
+                    + "order" + order.getId() + ".jpeg";
+            userPhoto = new File(photoPath);
+            userPhoto.delete();
+        }
     }
 }
