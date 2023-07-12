@@ -61,14 +61,9 @@ public class ClientController {
 
         String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
-        if(file.renameTo(newFile)){
-            System.out.println("Файл переименован успешно");;
-        }else{
-            System.out.println("Файл не был переименован");
-        }
+        file.renameTo(newFile);
 
         return "redirect:/";
     }
@@ -78,9 +73,8 @@ public class ClientController {
 
         model.addAttribute("title", "Карточка клиента");
 
-        String photoPath = Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
-
-        model.addAttribute("photoPath" , photoPath);
+        String photoPath = File.separator + Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
+        model.addAttribute("photoPath", photoPath);
 
         // Проверка наличия в базе клиента и информации с данным id
         if(!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
@@ -108,6 +102,11 @@ public class ClientController {
         if (!clientRepository.existsById(id) || !additionalClientInfoRepository.existsById(id)) {
             return "redirect:/";
         }
+
+        model.addAttribute("title", "Редактирование карточки");
+
+        String photoPath = File.separator + Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
+        model.addAttribute("photoPath", photoPath);
 
         Optional<Client> client = clientRepository.findById(id);
         ArrayList<Client> res = new ArrayList<>();
@@ -145,6 +144,12 @@ public class ClientController {
         additionalClientInfo.setLastMsg(lastMsg);
         additionalClientInfo.setDescription(description);
         additionalClientInfoRepository.save(additionalClientInfo);
+
+        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+        File file = new File(resourcePath + "newImage");
+        File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
+        file.renameTo(newFile);
 
         return "redirect:/client{id}";
     }

@@ -23,8 +23,7 @@
 <div class="container mt-4">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <img th:src="${photoPath}" alt="sorry" class="rounded img-thumbnail">
-            <h1 th:text="${photoPath}"></h1>
+            <img th:src="${photoPath}" onerror="this.src='/images/defaultImage.jpeg';" alt="sorry" class="rounded img-thumbnail">
         </div>
 
         <div class="col-md-7 col-lg-8">

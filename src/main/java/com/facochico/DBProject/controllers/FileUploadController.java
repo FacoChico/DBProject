@@ -14,10 +14,6 @@ import java.util.Objects;
 
 @Controller
 public class FileUploadController {
-    @GetMapping("/index")
-    public String hello() {
-        return "uploader";
-    }
 
     @PostMapping("/upload")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file ) {
@@ -29,6 +25,7 @@ public class FileUploadController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
         return ResponseEntity.ok("File uploaded successfully.");
     }
 }
