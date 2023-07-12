@@ -108,7 +108,7 @@
         async function uploadFile() {
             let formData = new FormData();
             formData.append("file", fileUpload.files[0]);
-            let response = await fetch('/upload', {
+            let response = await fetch('/uploadClientPhoto', {
                 method: "POST",
                 body: formData
             });

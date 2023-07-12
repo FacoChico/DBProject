@@ -24,10 +24,12 @@ public class OrderController {
     private OrderRepository orderRepository;
     @Autowired
     private ClientRepository clientRepository;
+    public static volatile boolean isReady = false;
 
     @GetMapping("/client{clientId}/new-order")
     public String newOrderMapping(@PathVariable(value = "clientId") Long clientId, Model model) {
         model.addAttribute("title", "Создание заказа");
+        model.addAttribute("clientId", clientId);
         return "order-add";
     }
 
@@ -40,10 +42,15 @@ public class OrderController {
         ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, orderDate, description);
         orderRepository.save(clientOrder);
 
+        while (!isReady) Thread.onSpinWait();
+
         String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "order" + clientOrder.getId() + ".jpeg");
+
+        isReady = false;
+
         file.renameTo(newFile);
 
         return "redirect:/client{clientId}";

@@ -29,7 +29,7 @@
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Создание карточки заказа</h4>
 
-            <form class="needs-validation" novalidate="" method="post">
+            <form th:action="@{|/client${clientId}/new-order|}" class="needs-validation" novalidate="" method="post">
                 <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="category" class="form-label">Категория</label>
@@ -73,7 +73,7 @@
         async function uploadFile() {
             let formData = new FormData();
             formData.append("file", fileUpload.files[0]);
-            let response = await fetch('/upload', {
+            let response = await fetch('/uploadOrderPhoto', {
                 method: "POST",
                 body: formData
             });
