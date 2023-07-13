@@ -84,7 +84,9 @@ public class OrderController {
     }
 
     @GetMapping("/client{clientId}/order{orderId}/edit")
-    public String orderEdit(@PathVariable(value = "orderId") Long orderId, Model model) {
+    public String orderEdit(@PathVariable(value = "orderId") Long orderId,
+                            @PathVariable(value = "clientId") Long clientId,
+                            Model model) {
 
         if(!orderRepository.existsById(orderId)) {
             return "redirect:/";
@@ -100,6 +102,8 @@ public class OrderController {
         ArrayList<ClientOrder> res = new ArrayList<>();
         order.ifPresent(res::add);
         model.addAttribute("order", res);
+
+        model.addAttribute("clientId", clientId);
 
         return "order-card-edit";
     }
@@ -142,5 +146,16 @@ public class OrderController {
         userPhoto.delete();
 
         return "redirect:/";
+    }
+
+    @PostMapping("/client{clientId}/order{orderId}/deletePhoto")
+    public String deletePhoto(@PathVariable(value = "clientId") Long clientId,
+                              @PathVariable(value = "orderId") Long orderId,
+                              @RequestParam("orderPhotoPath") String orderPhotoPath) {
+
+        File userPhoto = new File(orderPhotoPath);
+        userPhoto.delete();
+
+        return "redirect:/client{clientId}/order{orderId}";
     }
 }

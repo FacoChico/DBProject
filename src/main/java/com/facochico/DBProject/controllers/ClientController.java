@@ -124,6 +124,8 @@ public class ClientController {
         additionalClientInfo.ifPresent(res2::add);
         model.addAttribute("additionalClientInfo", res2);
 
+        model.addAttribute("clientId", id);
+
         return "client-card-edit";
     }
 
@@ -193,5 +195,14 @@ public class ClientController {
             userPhoto = new File(photoPath);
             userPhoto.delete();
         }
+    }
+
+    @PostMapping("/client{id}/deletePhoto")
+    public String deletePhoto(@PathVariable(value = "id") long id, @RequestParam("clientPhotoPath") String clientPhotoPath) {
+
+        File userPhoto = new File(clientPhotoPath);
+        userPhoto.delete();
+
+        return "redirect:/client{id}";
     }
 }

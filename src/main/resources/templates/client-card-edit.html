@@ -21,10 +21,19 @@
 <div class="container mt-4">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <img th:src="${photoPath}" onerror="this.src='/images/defaultImage.jpeg';" alt="sorry" class="rounded img-thumbnail">
+            <img th:src="${photoPath}"
+                 onerror="this.src='/images/defaultImage.jpeg'; document.getElementById('photoDeleteForm').style.display='none';"
+                 alt="sorry" class="rounded img-thumbnail">
+
             <input id="fileUpload" type="file" name="fileupload" />
             <button id="upload-button" onclick="previewImage();"> Upload </button>
             <img id="image" style="display:none" class="img img-thumbnail">
+
+            <form id="photoDeleteForm" th:action="@{|/client${clientId}/deletePhoto|}" method="post">
+                <input type="hidden" name="clientPhotoPath" th:value="'target/classes/static/uploads/client' + ${clientId} + '.jpeg'">
+                <p id="id" th:value="${clientId}" style="display: none;"></p>
+                <input type="submit" value="Удалить фото">
+            </form>
         </div>
 
         <div class="col-md-7 col-lg-8">
