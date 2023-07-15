@@ -75,4 +75,30 @@ public class Client {
     public void setBDay(String bDay) {
         this.bDay = bDay;
     }
+
+    public boolean matchesFullName(String query) {
+        String[] parts = query.trim().split("\\s+");
+        boolean surnameMatched = false;
+        boolean nameMatched = false;
+        boolean patronymicMatched = false;
+
+        for (String queryPart : parts) {
+            if (surname != null) {
+                surnameMatched = surname.contains(queryPart);
+            }
+            else surnameMatched = true;
+
+            if (name != null) {
+                nameMatched = name.contains(queryPart);
+            }
+            else nameMatched = true;
+
+            if (patronymic != null) {
+                patronymicMatched = patronymic.contains(queryPart);
+            }
+            else patronymicMatched = true;
+        }
+
+        return nameMatched || patronymicMatched || surnameMatched;
+    }
 }
