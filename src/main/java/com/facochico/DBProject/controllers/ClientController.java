@@ -29,6 +29,7 @@ public class ClientController {
     @Autowired
     private OrderRepository orderRepository;
     public static volatile boolean isReady = false;
+    public static volatile boolean isVisited = false;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -65,16 +66,20 @@ public class ClientController {
                 clothSize, footSize, lastMsg, lastPurchase, description);
         additionalClientInfoRepository.save(additionalClientInfo);
 
-        while (!isReady) Thread.onSpinWait();
+        if (isVisited) {
+            while (!isReady) Thread.onSpinWait();
 
-        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-        File file = new File(resourcePath + "newImage");
-        File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
-        file.renameTo(newFile);
+            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+            File file = new File(resourcePath + "newImage");
+            File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
+            file.renameTo(newFile);
 
-        System.out.println("Client. Изменение состояния на FALSE в ClientController при СОЗДАНИИ");
-        isReady = false;
+            System.out.println("Client. Изменение состояния на FALSE в ClientController при СОЗДАНИИ");
+            isReady = false;
+            System.out.println("Upload. Изменение состояния isVisited на FALSE");
+            isVisited = false;
+        }
 
         return "redirect:/";
     }
@@ -162,16 +167,20 @@ public class ClientController {
 
         additionalClientInfoRepository.save(additionalClientInfo);
 
-        while (!isReady) Thread.onSpinWait();
+        if (isVisited) {
+            while (!isReady) Thread.onSpinWait();
 
-        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-        File file = new File(resourcePath + "newImage");
-        File newFile = new File(resourcePath + "client" + id + ".jpeg");
-        file.renameTo(newFile);
+            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+            File file = new File(resourcePath + "newImage");
+            File newFile = new File(resourcePath + "client" + id + ".jpeg");
+            file.renameTo(newFile);
 
-        System.out.println("Client. Изменение состояния на FALSE в ClientController при ИЗМЕНЕНИИ");
-        isReady = false;
+            System.out.println("Client. Изменение состояния на FALSE в ClientController при ИЗМЕНЕНИИ");
+            isReady = false;
+            System.out.println("Upload. Изменение состояния isVisited на FALSE");
+            isVisited = false;
+        }
 
         return "redirect:/client{id}";
     }

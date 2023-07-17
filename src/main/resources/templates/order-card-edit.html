@@ -21,8 +21,8 @@
 <div class="container mt-4">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <img th:src="${photoPath}" onerror="this.src='/images/defaultImage.jpeg'; document.getElementById('photoDeleteForm').style.display='none';" alt="sorry" class="rounded img-thumbnail">
-            <input id="fileUpload" type="file" name="fileupload" />
+            <img th:src="${photoPath}" onerror="this.src='/images/defaultOrder.jpeg'; document.getElementById('photoDeleteForm').style.display='none';" alt="sorry" class="rounded img-thumbnail">
+            <input id="fileUpload" type="file" name="fileupload" onchange="visit();"/>
             <button id="upload-button" onclick="previewImage();"> Upload </button>
             <img id="image" style="display:none" class="img img-thumbnail">
 
@@ -88,9 +88,30 @@
     </div>
 
     <script>
-        async function uploadFile() {
+        async function visit() {
+            let file = fileUpload.files[0];
             let formData = new FormData();
-            formData.append("file", fileUpload.files[0]);
+            if (file) {
+                formData.append("isVisited", true);
+            }
+            else {
+                formData.append("isVisited", false);
+            }
+            let visit = await fetch('/orderVisit', {
+                method: "POST",
+                body: formData
+            });
+        }
+    </script>
+
+    <script>
+        async function uploadFile() {
+            let file = fileUpload.files[0];
+            if (!file) {
+                return;
+            }
+            let formData = new FormData();
+            formData.append("file", file);
             let response = await fetch('/uploadOrderPhoto', {
                 method: "POST",
                 body: formData

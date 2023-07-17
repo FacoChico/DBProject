@@ -12,6 +12,20 @@ import java.nio.file.Paths;
 
 @Controller
 public class FileUploadController {
+    @PostMapping("/clientVisit")
+    public ResponseEntity<?> clientVisit(@RequestParam("isVisited") boolean isVisited) {
+        ClientController.isVisited = isVisited;
+        System.out.println("Upload. Изменение состояния isVisited на " + isVisited);
+        return ResponseEntity.ok("OK");
+    }
+
+    @PostMapping("/orderVisit")
+    public ResponseEntity<?> orderVisit(@RequestParam("isVisited") boolean isVisited) {
+        OrderController.isVisited = isVisited;
+        System.out.println("Upload. Изменение состояния isVisited на " + isVisited);
+        return ResponseEntity.ok("OK");
+    }
+
     @PostMapping("/uploadClientPhoto")
     public ResponseEntity<?> handleClientPhotoUpload(@RequestParam("file") MultipartFile file ) {
         String resourcesDir = Paths.get("target" + File.separator + "classes" + File.separator

@@ -25,6 +25,7 @@ public class OrderController {
     @Autowired
     private ClientRepository clientRepository;
     public static volatile boolean isReady = false;
+    public static volatile boolean isVisited = false;
 
     @GetMapping("/client{clientId}/new-order")
     public String newOrderMapping(@PathVariable(value = "clientId") Long clientId, Model model) {
@@ -42,19 +43,23 @@ public class OrderController {
         ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, orderDate, description);
         orderRepository.save(clientOrder);
 
-        while (!isReady) Thread.onSpinWait();
+        if (isVisited) {
+            while (!isReady) Thread.onSpinWait();
 
-        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-        File file = new File(resourcePath + "newImage");
-        File newFile = new File(resourcePath + "order" + clientOrder.getId() + ".jpeg");
+            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+            File file = new File(resourcePath + "newImage");
+            File newFile = new File(resourcePath + "order" + clientOrder.getId() + ".jpeg");
 
-        file.renameTo(newFile);
+            file.renameTo(newFile);
 
-        System.out.println("Order. Изменение состояния на FALSE в OrderController при СОЗДАНИИ");
-        isReady = false;
+            System.out.println("Order. Изменение состояния на FALSE в OrderController при СОЗДАНИИ");
+            isReady = false;
+            System.out.println("Upload. Изменение состояния isVisited на FALSE");
+            isVisited = false;
+        }
 
-        return "redirect:/client{clientId}";
+        return ("redirect:/client{clientId}");
     }
 
     @GetMapping("/client{clientId}/order{orderId}")
@@ -125,16 +130,20 @@ public class OrderController {
 
         orderRepository.save(clientOrder);
 
-        while (!isReady) Thread.onSpinWait();
+        if (isVisited) {
+            while (!isReady) Thread.onSpinWait();
 
-        String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-        File file = new File(resourcePath + "newImage");
-        File newFile = new File(resourcePath + "order" + orderId + ".jpeg");
-        file.renameTo(newFile);
+            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
+                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
+            File file = new File(resourcePath + "newImage");
+            File newFile = new File(resourcePath + "order" + orderId + ".jpeg");
+            file.renameTo(newFile);
 
-        System.out.println("Order. Изменение состояния на FALSE в OrderController при ИЗМЕНЕНИИ");
-        isReady = false;
+            System.out.println("Order. Изменение состояния на FALSE в OrderController при ИЗМЕНЕНИИ");
+            isReady = false;
+            System.out.println("Upload. Изменение состояния isVisited на FALSE");
+            isVisited = false;
+        }
 
         return "redirect:/client{clientId}/order{orderId}";
     }
