@@ -49,9 +49,10 @@ public class OrderController {
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "order" + clientOrder.getId() + ".jpeg");
 
-        isReady = false;
-
         file.renameTo(newFile);
+
+        System.out.println("Order. Изменение состояния на FALSE в OrderController при СОЗДАНИИ");
+        isReady = false;
 
         return "redirect:/client{clientId}";
     }
@@ -124,11 +125,16 @@ public class OrderController {
 
         orderRepository.save(clientOrder);
 
+        while (!isReady) Thread.onSpinWait();
+
         String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "order" + orderId + ".jpeg");
         file.renameTo(newFile);
+
+        System.out.println("Order. Изменение состояния на FALSE в OrderController при ИЗМЕНЕНИИ");
+        isReady = false;
 
         return "redirect:/client{clientId}/order{orderId}";
     }

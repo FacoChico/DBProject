@@ -41,23 +41,30 @@
 
             <form class="needs-validation" novalidate="" method="post">
                 <div th:each="el : ${client}">
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="firstName" class="form-label">Имя</label>
-                            <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName"  value="" required="">
-                            <div class="invalid-feedback">
-                                Введите корректное имя
+                    <div th:each="elAddit : ${additionalClientInfo}">
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="firstName" class="form-label">Имя</label>
+                                <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName"  value="" required="">
+                                <div class="invalid-feedback">
+                                    Введите корректное имя
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Фамилия</label>
-                            <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" placeholder="" value="" required="">
-                        </div>
+                            <div class="col-sm-6">
+                                <label for="lastName" class="form-label">Фамилия</label>
+                                <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" placeholder="" value="" required="">
+                            </div>
 
-                        <div class="col-sm-6">
-                            <label for="patronymic" class="form-label">Отчество</label>
-                            <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" placeholder="" value="" required="">
+                            <div class="col-sm-6">
+                                <label for="patronymic" class="form-label">Отчество</label>
+                                <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" placeholder="" value="" required="">
+                            </div>
+
+                            <div class="col-sm-6">
+                                <label for="socialStatus" class="form-label">Социальный статус</label>
+                                <input type="text" th:value="${elAddit.socialStatus}" name="socialStatus" class="form-control" id="socialStatus" placeholder="" value="" required="">
+                            </div>
                         </div>
                     </div>
 
@@ -78,22 +85,31 @@
 
                 <hr class="my-4">
 
-                <div class="row g-3" th:each="el : ${additionalClientInfo}">
-                    <div class="col-sm-6">
-                        <label for="foot_size" class="form-label">Размер обуви</label>
-                        <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="foot_size">
+                <div th:each="el : ${additionalClientInfo}">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="foot_size" class="form-label">Размер обуви</label>
+                            <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="foot_size">
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="clothe_size" class="form-label">Размер одежды</label>
+                            <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothe_size">
+                        </div>
                     </div>
 
-                    <div class="col-sm-6">
-                        <label for="clothe_size" class="form-label">Размер одежды</label>
-                        <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothe_size">
-                    </div>
+                        <hr class="my-4">
 
-                    <hr class="my-4">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="last_message_date" class="form-label">Дата последнего сообщения</label>
+                            <input type="date" th:value="${el.lastMsg}" name="lastMsg" class="form-control" id="last_message_date">
+                        </div>
 
-                    <div class="col-sm-6">
-                        <label for="last_message_date" class="form-label">Дата последнего сообщения</label>
-                        <input type="date" th:value="${el.lastMsg}" name="lastMsg" class="form-control" id="last_message_date">
+                        <div class="col-sm-6">
+                            <label for="last_purchase_date" class="form-label">Дата последней покупки</label>
+                            <input type="date" th:value="${el.lastPurchase}" name="lastPurchase" class="form-control" id="last_purchase_date">
+                        </div>
                     </div>
 
                     <hr class="my-4">

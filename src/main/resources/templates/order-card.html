@@ -50,7 +50,7 @@
 
                         <div th:each="el : ${order}">
                             <p th:text="'Размер: ' + ${el.size}"/>
-                            <p th:text="'Дата заказа: ' + ${el.orderDate}"/>
+                            <p th:text="'Дата оплаты заказа: ' + ${el.orderDate}"/>
                             <hr class="my-4">
                             <p th:text="'Общее описание: ' + ${el.description}"/>
                         </div>

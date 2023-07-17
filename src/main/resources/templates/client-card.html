@@ -47,10 +47,14 @@
                         </div>
 
                         <div th:each="el : ${additionalClientInfo}">
+                            <p th:text="'Социальный статус: ' + ${el.socialStatus}"/>
                             <p th:text="'Размер одежды: ' + ${el.clothSize}"/>
                             <p th:text="'Размер обуви: ' + ${el.footSize}"/>
                             <p th:text="'Дата последнего сообщения: ' + ${el.lastMsg}"/>
+                            <p th:text="'Дата последней покупки: ' + ${el.lastPurchase}"/>
+
                             <hr class="my-4">
+
                             <p th:text="'Общее описание: ' + ${el.description}"/>
                         </div>
                     </div>
@@ -86,7 +90,7 @@
                                 <tbody>
 
                                 <div th:each="el : ${clientOrder}">
-                                    <tr th:clientHref="'client' + ${el.clientId} + '/order' + ${el.id}">
+                                    <tr th:clientHref="'client' + ${el.clientId} + '/order' + ${el.id}" style="cursor: pointer">
                                         <td th:text="${el.category}"/>
                                         <td th:text="${el.brand}"/>
                                     </tr>

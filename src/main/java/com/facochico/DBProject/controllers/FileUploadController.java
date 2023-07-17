@@ -10,8 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.nio.file.Paths;
 
-
-
 @Controller
 public class FileUploadController {
     @PostMapping("/uploadClientPhoto")
@@ -20,7 +18,10 @@ public class FileUploadController {
                  + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         try {
             file.transferTo( new File(resourcesDir + "newImage"));
+            System.out.println("Client. Изменение состояния на TRUE в UploadController");
+            ClientController.isReady = true;
         } catch (Exception e) {
+            System.out.println("Client. Произошла ошибка при создании newImage!");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
@@ -29,15 +30,16 @@ public class FileUploadController {
 
     @PostMapping("/uploadOrderPhoto")
     public ResponseEntity<?> handleOrderPhotoUpload(@RequestParam("file") MultipartFile file ) {
-        OrderController.isReady = false;
         String resourcesDir = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         try {
             file.transferTo( new File(resourcesDir + "newImage"));
+            System.out.println("Order. Изменение состояния на TRUE в UploadController");
+            OrderController.isReady = true;
         } catch (Exception e) {
+            System.out.println("Order. Произошла ошибка при создании newImage!");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        OrderController.isReady = true;
 
         return ResponseEntity.ok("File uploaded successfully.");
     }

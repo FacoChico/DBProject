@@ -10,18 +10,22 @@ public class AdditionalClientInfo {
     @Id
     private Long id;
 
+    private String socialStatus;
     private String clothSize;
     private String footSize;
     private String lastMsg;
+    private String lastPurchase;
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    public AdditionalClientInfo(Long id, String clothSize, String footSize, String lastMsg, String description) {
+    public AdditionalClientInfo(Long id, String socialStatus, String clothSize, String footSize, String lastMsg, String lastPurchase, String description) {
         this.id = id;
+        this.socialStatus = socialStatus;
         this.clothSize = clothSize;
         this.footSize = footSize;
         this.lastMsg = lastMsg;
         this.description = description;
+        this.lastPurchase = lastPurchase;
     }
 
     public AdditionalClientInfo() {
@@ -33,6 +37,14 @@ public class AdditionalClientInfo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSocialStatus() {
+        return socialStatus;
+    }
+
+    public void setSocialStatus(String socialStatus) {
+        this.socialStatus = socialStatus;
     }
 
     public String getClothSize() {
@@ -57,6 +69,14 @@ public class AdditionalClientInfo {
 
     public void setLastMsg(String lastMsg) {
         this.lastMsg = lastMsg;
+    }
+
+    public String getLastPurchase() {
+        return lastPurchase;
+    }
+
+    public void setLastPurchase(String lastPurchase) {
+        this.lastPurchase = lastPurchase;
     }
 
     public String getDescription() {

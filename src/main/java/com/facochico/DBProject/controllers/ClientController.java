@@ -28,6 +28,7 @@ public class ClientController {
     private AdditionalClientInfoRepository additionalClientInfoRepository;
     @Autowired
     private OrderRepository orderRepository;
+    public static volatile boolean isReady = false;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -52,21 +53,28 @@ public class ClientController {
     @PostMapping("/add")
     public String addClient(@RequestParam String name, @RequestParam String patronymic,
                             @RequestParam String surname, @RequestParam String phoneNumber,
-                            @RequestParam String bDay, @RequestParam String clothSize,
-                            @RequestParam String footSize,  @RequestParam String lastMsg,
+                            @RequestParam String bDay, @RequestParam String socialStatus,
+                            @RequestParam String clothSize, @RequestParam String footSize,
+                            @RequestParam String lastMsg, @RequestParam String lastPurchase,
                             @RequestParam String description) {
 
         Client client = new Client(name, patronymic, surname, phoneNumber, bDay);
         clientRepository.save(client);
 
-        AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), clothSize, footSize, lastMsg, description);
+        AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), socialStatus,
+                clothSize, footSize, lastMsg, lastPurchase, description);
         additionalClientInfoRepository.save(additionalClientInfo);
+
+        while (!isReady) Thread.onSpinWait();
 
         String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
         file.renameTo(newFile);
+
+        System.out.println("Client. Изменение состояния на FALSE в ClientController при СОЗДАНИИ");
+        isReady = false;
 
         return "redirect:/";
     }
@@ -127,11 +135,12 @@ public class ClientController {
     }
 
     @PostMapping("/client{id}/edit")
-    public String clientUpdate(@PathVariable(value = "id") long id, @RequestParam String name, @RequestParam String patronymic,
-                               @RequestParam String surname, @RequestParam String phoneNumber,
-                               @RequestParam String bDay, @RequestParam String clothSize,
+    public String clientUpdate(@PathVariable(value = "id") long id, @RequestParam String name,
+                               @RequestParam String patronymic, @RequestParam String surname,
+                               @RequestParam String phoneNumber, @RequestParam String bDay,
+                               @RequestParam String socialStatus, @RequestParam String clothSize,
                                @RequestParam String footSize,  @RequestParam String lastMsg,
-                               @RequestParam String description) {
+                               @RequestParam String lastPurchase, @RequestParam String description) {
 
         Client client = clientRepository.findById(id).orElseThrow(); // orElseThrow() выбрасывает исключение в случае, если запись была не найдена
 
@@ -144,17 +153,25 @@ public class ClientController {
 
         AdditionalClientInfo additionalClientInfo = additionalClientInfoRepository.findById(id).orElseThrow();
 
+        additionalClientInfo.setSocialStatus(socialStatus);
         additionalClientInfo.setClothSize(clothSize);
         additionalClientInfo.setFootSize(footSize);
         additionalClientInfo.setLastMsg(lastMsg);
+        additionalClientInfo.setLastPurchase(lastPurchase);
         additionalClientInfo.setDescription(description);
+
         additionalClientInfoRepository.save(additionalClientInfo);
+
+        while (!isReady) Thread.onSpinWait();
 
         String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         File file = new File(resourcePath + "newImage");
         File newFile = new File(resourcePath + "client" + id + ".jpeg");
         file.renameTo(newFile);
+
+        System.out.println("Client. Изменение состояния на FALSE в ClientController при ИЗМЕНЕНИИ");
+        isReady = false;
 
         return "redirect:/client{id}";
     }

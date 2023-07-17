@@ -18,8 +18,15 @@
             <main class="ms-5 col-lg-10">
                 <form th:action="@{/search}" method="get">
                     <h3 class="container mt-5">Поиск осуществляется по ФИО или телефону</h3>
-                    <input id="searchQuery" name="query" class="form-control container mt-2 mb-2" type="text" placeholder="Search" aria-label="Search">
-                    <button type="submit">Поиск</button>
+                    <div class="row">
+                        <div class="col-sm-9">
+                            <input id="searchQuery" name="query" class="form-control" type="text" placeholder="Search" aria-label="Search">
+                        </div>
+
+                        <div class="col">
+                            <button class="btn btn-light" type="submit">Поиск</button>
+                        </div>
+                    </div>
                 </form>
 
                 <div class="table-responsive small">
