@@ -33,26 +33,22 @@
                 <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="category" class="form-label">Категория</label>
-                        <input type="text" name="category" class="form-control" id="category"  value="" required="">
-
-                        <div class="invalid-feedback">
-                            Введите корректное имя
-                        </div>
+                        <input type="text" name="category" class="form-control" id="category" maxlength="250">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="brand" class="form-label">Бренд</label>
-                        <input type="text" name="brand" class="form-control" id="brand" placeholder="" value="" required="">
+                        <input type="text" name="brand" class="form-control" id="brand" maxlength="250">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="size" class="form-label">Размер</label>
-                        <input type="text" name="size" class="form-control" id="size" placeholder="" value="" required="">
+                        <input type="text" name="size" class="form-control" id="size" maxlength="16">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="orderDate" class="form-label">Дата оплаты заказа</label>
-                        <input type="text" name="orderDate" class="form-control" id="orderDate" placeholder="" value="" required="">
+                        <input type="text" name="orderDate" class="form-control" id="orderDate">
                     </div>
                 </div>
 
@@ -60,7 +56,7 @@
 
                 <h4 class="mb-3">Общее описание</h4>
 
-                <textarea name="description" class="form-control" rows="10"></textarea><br>
+                <textarea name="description" class="form-control" rows="10" maxlength="4000"></textarea><br>
 
                 <hr class="my-4">
 

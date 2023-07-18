@@ -45,7 +45,7 @@
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <label for="firstName" class="form-label">Имя</label>
-                                <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName"  value="" required="">
+                                <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName" maxlength="250">
                                 <div class="invalid-feedback">
                                     Введите корректное имя
                                 </div>
@@ -53,17 +53,17 @@
 
                             <div class="col-sm-6">
                                 <label for="lastName" class="form-label">Фамилия</label>
-                                <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" placeholder="" value="" required="">
+                                <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" maxlength="250">
                             </div>
 
                             <div class="col-sm-6">
                                 <label for="patronymic" class="form-label">Отчество</label>
-                                <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" placeholder="" value="" required="">
+                                <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" maxlength="250">
                             </div>
 
                             <div class="col-sm-6">
                                 <label for="socialStatus" class="form-label">Социальный статус</label>
-                                <input type="text" th:value="${elAddit.socialStatus}" name="socialStatus" class="form-control" id="socialStatus" placeholder="" value="" required="">
+                                <input type="text" th:value="${elAddit.socialStatus}" name="socialStatus" class="form-control" id="socialStatus" maxlength="250">
                             </div>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="phoneNumber" class="form-label">Номер телефона</label>
-                            <input type="text" th:value="${el.phoneNumber}" name="phoneNumber" class="form-control" id="phoneNumber" placeholder="" value="" required="">
+                            <input type="text" th:value="${el.phoneNumber}" name="phoneNumber" class="form-control" id="phoneNumber" maxlength="20">
                         </div>
 
                         <div class="col-sm-6">
@@ -89,12 +89,12 @@
                     <div class="row g-3">
                         <div class="col-sm-6">
                             <label for="foot_size" class="form-label">Размер обуви</label>
-                            <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="foot_size">
+                            <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="foot_size" maxlength="16">
                         </div>
 
                         <div class="col-sm-6">
                             <label for="clothe_size" class="form-label">Размер одежды</label>
-                            <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothe_size">
+                            <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothe_size" maxlength="16">
                         </div>
                     </div>
 
@@ -115,7 +115,7 @@
                     <hr class="my-4">
 
                     <h4 class="mb-3">Общее описание</h4>
-                    <textarea name="description" th:text="${el.description}" class="form-control" rows="10"></textarea><br>
+                    <textarea name="description" th:text="${el.description}" class="form-control" rows="10" maxlength="4000"></textarea><br>
                 </div>
 
                 <hr class="my-4">
