@@ -12,14 +12,14 @@
 <header th:insert="/blocks/header :: header"></header>
 
 <!-- Тело страницы -->
-<div>
+<div style="min-height: 600px">
     <div class="container-fluid">
-        <div class="row">
-            <main class="ms-5 col-lg-10">
+        <div class="row" style="display: flex; justify-content: center; align-items: center;">
+            <main class="col-lg-10">
                 <form th:action="@{/search}" method="get">
-                    <h3 class="container mt-5">Поиск осуществляется по ФИО или телефону</h3>
+                    <h3 class="mt-5">Поиск осуществляется по ФИО или телефону</h3>
                     <div class="row">
-                        <div class="col-sm-9">
+                        <div class="col-sm-5">
                             <input id="searchQuery" name="query" class="form-control" type="text" placeholder="Search" aria-label="Search">
                         </div>
 
@@ -29,7 +29,7 @@
                     </div>
                 </form>
 
-                <div class="table-responsive small">
+                <div class="table-responsive small mt-3">
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>

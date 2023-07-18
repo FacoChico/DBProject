@@ -78,23 +78,27 @@ public class Client {
 
     public boolean matchesFullName(String query) {
         String[] parts = query.trim().split("\\s+");
+
+        for (int i = 0; i < parts.length; i++)
+            parts[i] = parts[i].toLowerCase();
+
         boolean surnameMatched = false;
         boolean nameMatched = false;
         boolean patronymicMatched = false;
 
         for (String queryPart : parts) {
             if (surname != null) {
-                surnameMatched = surname.contains(queryPart);
+                surnameMatched = surname.toLowerCase().contains(queryPart);
             }
             else surnameMatched = true;
 
             if (name != null) {
-                nameMatched = name.contains(queryPart);
+                nameMatched = name.toLowerCase().contains(queryPart);
             }
             else nameMatched = true;
 
             if (patronymic != null) {
-                patronymicMatched = patronymic.contains(queryPart);
+                patronymicMatched = patronymic.toLowerCase().contains(queryPart);
             }
             else patronymicMatched = true;
         }

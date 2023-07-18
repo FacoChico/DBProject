@@ -1,14 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<style>
-    .square {
-        height: 100%;
-        width: 100%;
-        background-color: pink;
-    }
-</style>
-
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -20,7 +12,7 @@
 <header th:insert="/blocks/header :: header"></header>
 
 <!-- Тело страницы -->
-<div class="container mt-4">
+<div class="container mt-4" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
             <img th:src="${photoPath}" onerror="this.src='/images/defaultImage.jpeg';" alt="sorry" class="rounded img-thumbnail">
@@ -28,82 +20,71 @@
 
         <div class="col-md-7 col-lg-8">
             <form class="needs-validation" novalidate="" method="post">
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div th:each="el : ${client}">
-                            <h3 th:text="${el.name} + ' ' + ${el.patronymic} + ' ' + ${el.surname}"/>
-                            <a th:href="'/client' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
-                        </div>
-                    </div>
+                <div th:each="el : ${client}" style="display: grid; grid-template-columns: 4fr 1fr;">
+                    <h3 th:text="${el.name} + ' ' + ${el.patronymic} + ' ' + ${el.surname}"/>
+                    <a th:href="'/client' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
                 </div>
 
                 <hr class="my-4">
 
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div th:each="el : ${client}">
-                            <p th:text="'Номер телефона: ' + ${el.phoneNumber}"/>
-                            <p th:text="'Дата рождения: ' + ${el.BDay}"/>
-                        </div>
+                <div th:each="el : ${client}">
+                    <p th:text="'Номер телефона: ' + ${el.phoneNumber}"/>
+                    <p th:text="'Дата рождения: ' + ${el.BDay}"/>
+                </div>
 
-                        <div th:each="el : ${additionalClientInfo}">
-                            <p th:text="'Социальный статус: ' + ${el.socialStatus}"/>
-                            <p th:text="'Размер одежды: ' + ${el.clothSize}"/>
-                            <p th:text="'Размер обуви: ' + ${el.footSize}"/>
-                            <p th:text="'Дата последнего сообщения: ' + ${el.lastMsg}"/>
-                            <p th:text="'Дата последней покупки: ' + ${el.lastPurchase}"/>
+                <div th:each="el : ${additionalClientInfo}">
+                    <p th:text="'Социальный статус: ' + ${el.socialStatus}"/>
+                    <p th:text="'Размер одежды: ' + ${el.clothSize}"/>
+                    <p th:text="'Размер обуви: ' + ${el.footSize}"/>
+                    <p th:text="'Дата последнего сообщения: ' + ${el.lastMsg}"/>
+                    <p th:text="'Дата последней покупки: ' + ${el.lastPurchase}"/>
 
-                            <hr class="my-4">
-
-                            <p th:text="'Общее описание: ' + ${el.description}"/>
-                        </div>
-                    </div>
+                    <hr class="my-4">
+                    <p th:text="'Общее описание: ' + ${el.description}"/>
                 </div>
             </form>
         </div>
     </div>
 
+    <hr class="my-4">
+
     <!-- Заказы клиента -->
     <div class="row g-5">
-        <div class="col-md-5 col-lg-4"></div>
 
-        <div class="col-md-7 col-lg-8">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-4"></div>
-                    <main class="my-4 col-lg-8 col-sm-offset-3">
-                        <div th:each="el : ${client}">
-                            <p>
-                                <a th:href="'/client' + ${el.id} + '/new-order'" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Новый заказ</a>
-                            </p>
-                        </div>
+        <h3>Заказы</h3>
 
-                        <div class="table-responsive">
-                            <table class="table table-striped table-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">КАТЕГОРИЯ</th>
-                                    <th scope="col">БРЕНД</th>
-                                </tr>
-                                </thead>
+        <main class="my-4 col-lg-8 col-sm-offset-3">
 
-                                <tbody>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th scope="col">КАТЕГОРИЯ</th>
+                        <th scope="col">БРЕНД</th>
+                    </tr>
+                    </thead>
 
-                                <div th:each="el : ${clientOrder}">
-                                    <tr th:clientHref="'client' + ${el.clientId} + '/order' + ${el.id}" style="cursor: pointer">
-                                        <td th:text="${el.category}"/>
-                                        <td th:text="${el.brand}"/>
-                                    </tr>
-                                </div>
+                    <tbody>
 
-                                </tbody>
-                            </table>
-                        </div>
-                    </main>
-                </div>
+                    <div th:each="el : ${clientOrder}">
+                        <tr th:clientHref="'client' + ${el.clientId} + '/order' + ${el.id}" style="cursor: pointer">
+                            <td th:text="${el.category}"/>
+                            <td th:text="${el.brand}"/>
+                        </tr>
+                    </div>
+                    </tbody>
+                </table>
             </div>
-        </div>
+
+            <div th:each="el : ${client}">
+                <a th:href="'/client' + ${el.id} + '/new-order'" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Новый заказ</a>
+            </div>
+
+        </main>
+
     </div>
+
+
 
     <script>
         const tableRows = document.querySelectorAll('tr[clientHref]');

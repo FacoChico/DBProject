@@ -1,14 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<style>
-  .square {
-    height: 100%;
-    width: 100%;
-    background-color: pink;
-  }
-</style>
-
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -20,7 +12,7 @@
 <header th:insert="/blocks/header :: header"></header>
 
 <!-- Тело страницы -->
-<div class="container mt-4">
+<div class="container mt-4" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
             <img th:src="${photoPath}" onerror="this.src='/images/defaultOrder.jpeg';" alt="sorry" class="rounded img-thumbnail">
@@ -28,33 +20,24 @@
 
         <div class="col-md-7 col-lg-8">
             <form class="needs-validation" novalidate="" method="post">
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div th:each="el : ${client}">
-                            <h3 th:text="'Заказ клиента ' + ${el.name} + ' ' + ${el.surname}"/>
-                        </div>
-                        <div th:each="el : ${order}">
-                            <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
-                        </div>
+                <div style="display: grid; grid-template-columns: 4fr 1fr;">
+                    <div th:each="el : ${client}">
+                        <h3 th:text="'Заказ клиента ' + ${el.name} + ' ' + ${el.surname}"/>
+                    </div>
+                    <div th:each="el : ${order}">
+                        <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
                     </div>
                 </div>
 
                 <hr class="my-4">
 
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <div th:each="el : ${order}">
-                            <p th:text="'Категория: ' + ${el.category}"/>
-                            <p th:text="'Бренд: ' + ${el.brand}"/>
-                        </div>
-
-                        <div th:each="el : ${order}">
-                            <p th:text="'Размер: ' + ${el.size}"/>
-                            <p th:text="'Дата оплаты заказа: ' + ${el.orderDate}"/>
-                            <hr class="my-4">
-                            <p th:text="'Общее описание: ' + ${el.description}"/>
-                        </div>
-                    </div>
+                <div th:each="el : ${order}">
+                    <p th:text="'Категория: ' + ${el.category}"/>
+                    <p th:text="'Бренд: ' + ${el.brand}"/>
+                    <p th:text="'Размер: ' + ${el.size}"/>
+                    <p th:text="'Дата оплаты заказа: ' + ${el.orderDate}"/>
+                    <hr class="my-4">
+                    <p th:text="'Общее описание: ' + ${el.description}"/>
                 </div>
             </form>
         </div>
