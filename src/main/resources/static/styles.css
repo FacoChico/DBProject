@@ -1,0 +1,19 @@
+.forAll {
+    background-color: #2c2828;
+}
+
+.forText {
+    color: #2c2828;
+    font-family: Helvetica, sans-serif;
+}
+
+.forButtons {
+    color: #fffbfb;
+    background: #2c2828;
+    font-size: medium;
+    font-family: Helvetica, sans-serif;
+}
+
+.forInput {
+
+}

@@ -5,6 +5,7 @@
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
@@ -12,7 +13,7 @@
 <header th:insert="/blocks/header :: header"></header>
 
 <!-- Тело страницы -->
-<div class="container mt-4" style="min-height: 600px">
+<div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
             <img th:src="${photoPath}" onerror="this.src='/images/defaultOrder.jpeg';" alt="sorry" class="rounded img-thumbnail">
@@ -25,19 +26,34 @@
                         <h3 th:text="'Заказ клиента ' + ${el.name} + ' ' + ${el.surname}"/>
                     </div>
                     <div th:each="el : ${order}">
-                        <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="btn btn-warning">Редактировать</a>
+                        <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="w-100 btn btn-lg forButtons">Редактировать</a>
                     </div>
                 </div>
 
                 <hr class="my-4">
 
                 <div th:each="el : ${order}">
-                    <p th:text="'Категория: ' + ${el.category}"/>
-                    <p th:text="'Бренд: ' + ${el.brand}"/>
-                    <p th:text="'Размер: ' + ${el.size}"/>
-                    <p th:text="'Дата оплаты заказа: ' + ${el.orderDate}"/>
+                    <p>
+                        <strong>Категория:</strong>
+                        <span th:text="${el.category}"></span>
+                    </p>
+                    <p>
+                        <strong>Бренд:</strong>
+                        <span th:text="${el.brand}"></span>
+                    </p>
+                    <p>
+                        <strong>Размер:</strong>
+                        <span th:text="${el.size}"></span>
+                    </p>
+                    <p>
+                        <strong>Дата оплаты заказа:</strong>
+                        <span th:text="${el.orderDate}"></span>
+                    </p>
                     <hr class="my-4">
-                    <p th:text="'Общее описание: ' + ${el.description}"/>
+                    <p>
+                        <strong>Общее описание:</strong>
+                        <span th:text="${el.description}"></span>
+                    </p>
                 </div>
             </form>
         </div>
