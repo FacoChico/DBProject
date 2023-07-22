@@ -13,15 +13,17 @@ public class ClientOrder {
     private String category;
     private String brand;
     private String size;
+    private String color;
     private String orderDate;
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    public ClientOrder(Long clientId, String category, String brand, String size, String orderDate, String description) {
+    public ClientOrder(Long clientId, String category, String brand, String size, String color, String orderDate, String description) {
         this.clientId = clientId;
         this.category = category;
         this.brand = brand;
         this.size = size;
+        this.color = color;
         this.orderDate = orderDate;
         this.description = description;
     }
@@ -66,6 +68,14 @@ public class ClientOrder {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getOrderDate() {

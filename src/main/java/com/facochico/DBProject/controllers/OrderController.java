@@ -37,10 +37,10 @@ public class OrderController {
     @PostMapping("/client{clientId}/new-order")
     public String newOrder(@PathVariable(value = "clientId") long clientId,
                            @RequestParam String category, @RequestParam String brand,
-                           @RequestParam String size, @RequestParam String orderDate,
+                           @RequestParam String size, @RequestParam String color, @RequestParam String orderDate,
                            @RequestParam String description) {
 
-        ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, orderDate, description);
+        ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, color, orderDate, description);
         orderRepository.save(clientOrder);
 
         if (isVisited) {
@@ -117,7 +117,7 @@ public class OrderController {
     @PostMapping("/client{clientId}/order{orderId}/edit")
     public String orderUpdate(@PathVariable(value = "orderId") Long orderId,
                               @RequestParam String category, @RequestParam String brand,
-                              @RequestParam String size, @RequestParam String orderDate,
+                              @RequestParam String size, @RequestParam String color, @RequestParam String orderDate,
                               @RequestParam String description) {
 
         ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
@@ -125,6 +125,7 @@ public class OrderController {
         clientOrder.setCategory(category);
         clientOrder.setBrand(brand);
         clientOrder.setSize(size);
+        clientOrder.setColor(color);
         clientOrder.setOrderDate(orderDate);
         clientOrder.setDescription(description);
 

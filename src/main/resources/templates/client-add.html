@@ -1,18 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<style>
-    .square {
-        height: 100%;
-        width: 100%;
-        background-color: pink;
-    }
-
-    .form-control {
-        resize: none;
-    }
-</style>
-
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -28,8 +16,8 @@
 <div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <input id="fileUpload" type="file" name="fileupload" onchange="visit();" class="forInput"/>
-            <button id="upload-button" onclick="previewImage();">Посмотреть картинку</button>
+            <input class="form-control" id="fileUpload" type="file" name="fileupload" onchange="visit();"/>
+            <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
         </div>
 
@@ -40,7 +28,7 @@
                 <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="firstName" class="form-label">Имя</label>
-                        <input type="text" name="name" class="form-control" id="firstName" maxlength="250">
+                        <input type="text" name="name" class="form-control" id="firstName" maxlength="20">
 
                         <div class="invalid-feedback">
                             Введите корректное имя
@@ -49,12 +37,26 @@
 
                     <div class="col-sm-6">
                         <label for="lastName" class="form-label">Фамилия</label>
-                        <input type="text" name="surname" class="form-control" id="lastName" maxlength="250">
+                        <input type="text" name="surname" class="form-control" id="lastName" maxlength="20">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="patronymic" class="form-label">Отчество</label>
-                        <input type="text" name="patronymic" class="form-control" id="patronymic" maxlength="250">
+                        <input type="text" name="patronymic" class="form-control" id="patronymic" maxlength="20">
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="sex" class="form-label">Пол</label>
+                        <select name="sex" class="form-control" id="sex">
+                            <option value="Не выбран">Не выбран</option>
+                            <option value="Мужской">Мужской</option>
+                            <option value="Женский">Женский</option>
+                        </select>
                     </div>
 
                     <div class="col-sm-6">
@@ -110,9 +112,7 @@
                 <h4 class="mb-3">Общее описание</h4>
                 <textarea name="description" class="form-control" rows="10" maxlength="4000"></textarea><br>
 
-                <hr class="my-4">
-
-                <button class="w-100 btn btn-lg forButtons" type="submit" onclick="uploadFile();">Добавить клиента</button>
+                <button class="w-100 btn btn-light forButtons" type="submit" onclick="uploadFile();">Добавить клиента</button>
             </form>
         </div>
     </div>

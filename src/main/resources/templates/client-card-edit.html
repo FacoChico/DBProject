@@ -1,12 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<style>
-   .form-control {
-        resize: none;
-   }
-</style>
-
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -26,14 +20,14 @@
                  onerror="this.src='/images/defaultImage.jpeg'; document.getElementById('photoDeleteForm').style.display='none';"
                  alt="sorry" class="rounded img-thumbnail">
 
-            <input id="fileUpload" type="file" name="fileupload" onchange="visit()"/>
-            <button id="upload-button" onclick="previewImage();"> Upload </button>
+            <input class="form-control mt-1" id="fileUpload" type="file" name="fileupload" onchange="visit()"/>
+            <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
 
             <form id="photoDeleteForm" th:action="@{|/client${clientId}/deletePhoto|}" method="post">
                 <input type="hidden" name="clientPhotoPath" th:value="'target/classes/static/uploads/client' + ${clientId} + '.jpeg'">
                 <p id="id" th:value="${clientId}" style="display: none;"></p>
-                <input type="submit" value="Удалить фото">
+                <input class="btn btn-light forButtons mt-1" type="submit" value="Удалить фото">
             </form>
         </div>
 
@@ -46,7 +40,7 @@
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <label for="firstName" class="form-label">Имя</label>
-                                <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName" maxlength="250">
+                                <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName" maxlength="20">
                                 <div class="invalid-feedback">
                                     Введите корректное имя
                                 </div>
@@ -54,12 +48,25 @@
 
                             <div class="col-sm-6">
                                 <label for="lastName" class="form-label">Фамилия</label>
-                                <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" maxlength="250">
+                                <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" maxlength="20">
                             </div>
 
                             <div class="col-sm-6">
                                 <label for="patronymic" class="form-label">Отчество</label>
-                                <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" maxlength="250">
+                                <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" maxlength="20">
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <label for="sex" class="form-label">Пол</label>
+                                <select name="sex" class="form-control" id="sex">
+                                    <option value="Не выбрано" th:selected="${el.sex =='Не выбрано'}">Не выбрано</option>
+                                    <option value="Мужской" th:selected="${el.sex =='Мужской'}">Мужской</option>
+                                    <option value="Женский" th:selected="${el.sex =='Женский'}">Женский</option>
+                                </select>
                             </div>
 
                             <div class="col-sm-6">
@@ -67,6 +74,7 @@
                                 <input type="text" th:value="${elAddit.socialStatus}" name="socialStatus" class="form-control" id="socialStatus" maxlength="250">
                             </div>
                         </div>
+
                     </div>
 
                     <hr class="my-4">
@@ -119,15 +127,13 @@
                     <textarea name="description" th:text="${el.description}" class="form-control" rows="10" maxlength="4000"></textarea><br>
                 </div>
 
-                <hr class="my-4">
-
                 <div class="row">
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3 col-sm-offset-3"></div>
 
                     <div class="col-sm-3">
-                        <button class="w-100 btn btn-lg forButtons" type="submit" onclick="uploadFile();">Обновить</button>
+                        <button class="w-100 btn btn-light forButtons" type="submit" onclick="uploadFile();">Обновить</button>
                     </div>
                 </div>
             </form>
@@ -140,7 +146,7 @@
                 <div class="col-sm-3 col-sm-offset-3">
                     <div th:each="el : ${client}">
                         <form th:action="'/client' + ${el.id} + '/remove'" method="post">  <!-- Обработка данной формы будет происходить по указанному адресу -->
-                            <button class="w-100 btn btn-lg forButtons" type="submit" >Удалить</button> <!-- Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер -->
+                            <button class="w-100 btn btn-light forButtons" type="submit" >Удалить</button> <!-- Юзаем submit для того, чтобы при нажатии на кнопку у нас страница перезагружалась и данные отправлялись на сервер -->
                         </form>
                     </div>
                 </div>

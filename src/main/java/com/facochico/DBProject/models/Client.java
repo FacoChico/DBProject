@@ -14,14 +14,15 @@ public class Client {
     private String name;
     private String patronymic;
     private String surname;
+    private String sex;
     private String phoneNumber;
     private String bDay;
 
-
-    public Client(String name, String patronymic, String surname, String phoneNumber, String bDay) {
+    public Client(String name, String patronymic, String surname, String sex, String phoneNumber, String bDay) {
         this.name = name;
         this.patronymic = patronymic;
         this.surname = surname;
+        this.sex = sex;
         this.phoneNumber = phoneNumber;
         this.bDay = bDay;
     }
@@ -58,6 +59,14 @@ public class Client {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getPhoneNumber() {

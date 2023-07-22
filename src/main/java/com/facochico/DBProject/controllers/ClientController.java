@@ -53,13 +53,13 @@ public class ClientController {
 
     @PostMapping("/add")
     public String addClient(@RequestParam String name, @RequestParam String patronymic,
-                            @RequestParam String surname, @RequestParam String phoneNumber,
+                            @RequestParam String surname, @RequestParam String sex, @RequestParam String phoneNumber,
                             @RequestParam String bDay, @RequestParam String socialStatus,
                             @RequestParam String clothSize, @RequestParam String footSize,
                             @RequestParam String lastMsg, @RequestParam String lastPurchase,
                             @RequestParam String description) {
 
-        Client client = new Client(name, patronymic, surname, phoneNumber, bDay);
+        Client client = new Client(name, patronymic, surname, sex, phoneNumber, bDay);
         clientRepository.save(client);
 
         AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), socialStatus,
@@ -141,7 +141,7 @@ public class ClientController {
 
     @PostMapping("/client{id}/edit")
     public String clientUpdate(@PathVariable(value = "id") long id, @RequestParam String name,
-                               @RequestParam String patronymic, @RequestParam String surname,
+                               @RequestParam String patronymic, @RequestParam String surname, @RequestParam String sex,
                                @RequestParam String phoneNumber, @RequestParam String bDay,
                                @RequestParam String socialStatus, @RequestParam String clothSize,
                                @RequestParam String footSize,  @RequestParam String lastMsg,
@@ -152,6 +152,7 @@ public class ClientController {
         client.setName(name);
         client.setSurname(surname);
         client.setPatronymic(patronymic);
+        client.setSex(sex);
         client.setPhoneNumber(phoneNumber);
         client.setBDay(bDay);
         clientRepository.save(client);

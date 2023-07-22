@@ -1,19 +1,35 @@
 .forAll {
-    background-color: #2c2828;
+    background-color: #232323;
 }
 
 .forText {
-    color: #2c2828;
+    color: #232323;
     font-family: Helvetica, sans-serif;
 }
 
 .forButtons {
-    color: #fffbfb;
-    background: #2c2828;
     font-size: medium;
     font-family: Helvetica, sans-serif;
+    border: 1px solid #ced4da;
+
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
 }
 
-.forInput {
+.forButtons:hover {
+    background-color: #ced4da;
 
+}
+
+.forTables {
+    border: 1px solid #ced4da;
+}
+
+span {
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+.form-control {
+    resize: none;
 }

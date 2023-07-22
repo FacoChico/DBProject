@@ -25,13 +25,13 @@
                         </div>
 
                         <div class="col">
-                            <button class="btn btn-light" type="submit">Поиск</button>
+                            <button class="btn btn-light forButtons" type="submit">Найти</button>
                         </div>
                     </div>
                 </form>
 
                 <div th:if="${not #lists.isEmpty(results)}" class="table-responsive small mt-3">
-                    <table class="table table-striped table-sm">
+                    <table class="table table-hover table-striped table-sm forTables">
                         <thead>
                         <tr>
                             <th scope="col">ФИО</th>

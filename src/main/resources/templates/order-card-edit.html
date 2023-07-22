@@ -1,12 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<style>
-  .form-control {
-    resize: none;
-  }
-</style>
-
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -23,14 +17,14 @@
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
             <img th:src="${photoPath}" onerror="this.src='/images/defaultOrder.jpeg'; document.getElementById('photoDeleteForm').style.display='none';" alt="sorry" class="rounded img-thumbnail">
-            <input id="fileUpload" type="file" name="fileupload" onchange="visit();"/>
-            <button id="upload-button" onclick="previewImage();"> Upload </button>
+            <input class="form-control mt-1" id="fileUpload" type="file" name="fileupload" onchange="visit();"/>
+            <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
 
             <form id="photoDeleteForm" th:action="@{|/client${clientId}/order${orderId}/deletePhoto|}" method="post">
                 <input type="hidden" name="orderPhotoPath" th:value="'target/classes/static/uploads/order' + ${orderId} + '.jpeg'">
                 <p id="id" th:value="${orderId}" style="display: none;"></p>
-                <input type="submit" value="Удалить фото">
+                <input class="btn btn-light forButtons mt-1" type="submit" value="Удалить фото">
             </form>
         </div>
 
@@ -57,6 +51,16 @@
                         </div>
 
                         <div class="col-sm-6">
+                            <label for="color" class="form-label">Цвет</label>
+                            <input type="text" th:value="${el.color}" name="color" class="form-control" id="color" maxlength="32">
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row g-3">
+                        <div class="col-sm-6">
                             <label for="orderDate" class="form-label">Дата оплаты заказа</label>
                             <input type="date" th:value="${el.orderDate}" name="orderDate" class="form-control" id="orderDate">
                         </div>
@@ -69,15 +73,13 @@
                     <textarea th:text="${el.description}" name="description" class="form-control" rows="10" maxlength="4000"></textarea><br>
                 </div>
 
-                <hr class="my-4">
-
                 <div class="row">
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3"></div>
                     <div class="col-sm-3 col-sm-offset-3"></div>
 
                     <div class="col-sm-3">
-                        <button class="w-100 btn btn-lg forButtons" type="submit" onclick="uploadFile();">Обновить</button>
+                        <button class="w-100 btn btn-light forButtons" type="submit" onclick="uploadFile();">Обновить</button>
                     </div>
                 </div>
             </form>
@@ -91,7 +93,7 @@
                 <div class="col-sm-3">
                     <div th:each="el : ${order}">
                         <form th:action="'/client' + ${el.clientId} + '/order' + ${el.id} + '/remove'" method="post">
-                            <button class="w-100 btn btn-lg forButtons" type="submit" >Удалить</button>
+                            <button class="w-100 btn btn-light forButtons" type="submit" >Удалить</button>
                         </form>
                     </div>
                 </div>

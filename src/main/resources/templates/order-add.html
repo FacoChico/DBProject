@@ -1,12 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<style>
-    .form-control {
-        resize: none;
-    }
-</style>
-
 <head>
     <title th:text="${title}"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -22,8 +16,8 @@
 <div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <input id="fileUpload" type="file" name="fileupload" onchange="visit()"/>
-            <button id="upload-button" onclick="previewImage();">Посмотреть картинку</button>
+            <input class="form-control" id="fileUpload" type="file" name="fileupload" onchange="visit()"/>
+            <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
         </div>
 
@@ -34,12 +28,12 @@
                 <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="category" class="form-label">Категория</label>
-                        <input type="text" name="category" class="form-control" id="category" maxlength="250">
+                        <input type="text" name="category" class="form-control" id="category" maxlength="120">
                     </div>
 
                     <div class="col-sm-6">
                         <label for="brand" class="form-label">Бренд</label>
-                        <input type="text" name="brand" class="form-control" id="brand" maxlength="250">
+                        <input type="text" name="brand" class="form-control" id="brand" maxlength="120">
                     </div>
 
                     <div class="col-sm-6">
@@ -47,6 +41,16 @@
                         <input type="text" name="size" class="form-control" id="size" maxlength="16">
                     </div>
 
+                    <div class="col-sm-6">
+                        <label for="color" class="form-label">Цвет</label>
+                        <input type="text" name="color" class="form-control" id="color" maxlength="32">
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <div class="row g-3">
                     <div class="col-sm-6">
                         <label for="orderDate" class="form-label">Дата оплаты заказа</label>
                         <input type="date" name="orderDate" class="form-control" id="orderDate">
@@ -59,9 +63,7 @@
 
                 <textarea name="description" class="form-control" rows="10" maxlength="4000"></textarea><br>
 
-                <hr class="my-4">
-
-                <button class="w-100 btn btn-lg forButtons" onclick="uploadFile();" type="submit">Добавить заказ</button>
+                <button class="w-100 btn btn-light forButtons" onclick="uploadFile();" type="submit">Добавить заказ</button>
             </form>
         </div>
     </div>

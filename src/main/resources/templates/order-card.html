@@ -26,7 +26,7 @@
                         <h3 th:text="'Заказ клиента ' + ${el.name} + ' ' + ${el.surname}"/>
                     </div>
                     <div th:each="el : ${order}">
-                        <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="w-100 btn btn-lg forButtons">Редактировать</a>
+                        <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="w-100 btn btn-light forButtons">Редактировать</a>
                     </div>
                 </div>
 
@@ -44,6 +44,10 @@
                     <p>
                         <strong>Размер:</strong>
                         <span th:text="${el.size}"></span>
+                    </p>
+                    <p>
+                        <strong>Цвет:</strong>
+                        <span th:text="${el.color}"></span>
                     </p>
                     <p>
                         <strong>Дата оплаты заказа:</strong>
