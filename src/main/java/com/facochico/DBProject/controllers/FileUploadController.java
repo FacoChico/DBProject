@@ -27,7 +27,7 @@ public class FileUploadController {
     }
 
     @PostMapping("/uploadClientPhoto")
-    public ResponseEntity<?> handleClientPhotoUpload(@RequestParam("file") MultipartFile file ) {
+    public ResponseEntity<?> handleClientPhotoUpload(@RequestParam("file") MultipartFile file) {
         String resourcesDir = Paths.get("target" + File.separator + "classes" + File.separator
                  + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         try {
@@ -43,7 +43,7 @@ public class FileUploadController {
     }
 
     @PostMapping("/uploadOrderPhoto")
-    public ResponseEntity<?> handleOrderPhotoUpload(@RequestParam("file") MultipartFile file ) {
+    public ResponseEntity<?> handleOrderPhotoUpload(@RequestParam("file") MultipartFile file) {
         String resourcesDir = Paths.get("target" + File.separator + "classes" + File.separator
                 + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
         try {
