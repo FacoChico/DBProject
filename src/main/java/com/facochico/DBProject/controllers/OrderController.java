@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Optional;
 
 @Controller
@@ -24,40 +28,40 @@ public class OrderController {
     private OrderRepository orderRepository;
     @Autowired
     private ClientRepository clientRepository;
-    public static volatile boolean isReady = false;
-    public static volatile boolean isVisited = false;
 
     @GetMapping("/client{clientId}/new-order")
     public String newOrderMapping(@PathVariable(value = "clientId") Long clientId, Model model) {
         model.addAttribute("title", "Создание заказа");
         model.addAttribute("clientId", clientId);
+        System.out.println("ID: " + clientId);
         return "order-add";
     }
 
     @PostMapping("/client{clientId}/new-order")
     public String newOrder(@PathVariable(value = "clientId") long clientId,
-                           @RequestParam String category, @RequestParam String brand,
-                           @RequestParam String size, @RequestParam String color, @RequestParam String orderDate,
-                           @RequestParam String description) {
+                           @RequestParam("category") String category, @RequestParam("brand") String brand,
+                           @RequestParam("size") String size, @RequestParam("color") String color,
+                           @RequestParam("orderDate") String orderDate, @RequestParam("description") String description,
+                           @RequestParam(value = "file", required = false) MultipartFile file) {
 
-        ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, color, orderDate, description);
+        byte[] orderPhoto = null;
+
+        if (file != null) {
+            try {
+                orderPhoto = new byte[file.getBytes().length];
+                int i = 0;
+                for (byte b : file.getBytes()) {
+                    orderPhoto[i++] = b;
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, color, orderDate, description, orderPhoto);
         orderRepository.save(clientOrder);
 
-        if (isVisited) {
-            while (!isReady) Thread.onSpinWait();
-
-            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-            File file = new File(resourcePath + "newImage");
-            File newFile = new File(resourcePath + "order" + clientOrder.getId() + ".jpeg");
-
-            file.renameTo(newFile);
-
-            System.out.println("Order. Изменение состояния на FALSE в OrderController при СОЗДАНИИ");
-            isReady = false;
-            System.out.println("Upload. Изменение состояния isVisited на FALSE");
-            isVisited = false;
-        }
 
         return ("redirect:/client{clientId}");
     }
@@ -73,8 +77,11 @@ public class OrderController {
         String title = "Карточка заказа";
         model.addAttribute("title", title);
 
-        String photoPath = File.separator + Paths.get("uploads") + File.separator + "order" + orderId + ".jpeg";
-        model.addAttribute("photoPath", photoPath);
+        if (orderRepository.findById(orderId).get().getOrderPhoto() != null) {
+            byte[] encodeBase64 = Base64.getEncoder().encode(orderRepository.findById(orderId).get().getOrderPhoto());
+            String orderPhoto = new String(encodeBase64, StandardCharsets.UTF_8);
+            model.addAttribute("orderPhoto", orderPhoto);
+        }
 
         Optional<Client> client = clientRepository.findById(clientId);
         ArrayList<Client> res = new ArrayList<>();
@@ -98,6 +105,12 @@ public class OrderController {
             return "redirect:/";
         }
 
+        if (orderRepository.findById(orderId).get().getOrderPhoto() != null) {
+            byte[] encodeBase64 = Base64.getEncoder().encode(orderRepository.findById(orderId).get().getOrderPhoto());
+            String orderPhoto = new String(encodeBase64, StandardCharsets.UTF_8);
+            model.addAttribute("orderPhoto", orderPhoto);
+        }
+
         String title = "Редактирование карточки клиента";
         model.addAttribute("title", title);
 
@@ -115,12 +128,30 @@ public class OrderController {
     }
 
     @PostMapping("/client{clientId}/order{orderId}/edit")
-    public String orderUpdate(@PathVariable(value = "orderId") Long orderId,
-                              @RequestParam String category, @RequestParam String brand,
-                              @RequestParam String size, @RequestParam String color, @RequestParam String orderDate,
-                              @RequestParam String description) {
+    public String orderUpdate(@PathVariable(value = "clientId") long clientId, @PathVariable(value = "orderId") Long orderId,
+                              @RequestParam("category") String category, @RequestParam("brand") String brand,
+                              @RequestParam("size") String size, @RequestParam("color") String color,
+                              @RequestParam("orderDate") String orderDate, @RequestParam("description") String description,
+                              @RequestParam(value = "file", required = false) MultipartFile file) {
 
         ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
+
+        System.out.println("Here!!!");
+
+        byte[] orderPhoto = null;
+
+        if (file != null) {
+            try {
+                orderPhoto = new byte[file.getBytes().length];
+                int i = 0;
+                for (byte b : file.getBytes()) {
+                    orderPhoto[i++] = b;
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         clientOrder.setCategory(category);
         clientOrder.setBrand(brand);
@@ -129,48 +160,30 @@ public class OrderController {
         clientOrder.setOrderDate(orderDate);
         clientOrder.setDescription(description);
 
+        if (orderPhoto != null)
+            clientOrder.setOrderPhoto(orderPhoto);
+
         orderRepository.save(clientOrder);
-
-        if (isVisited) {
-            while (!isReady) Thread.onSpinWait();
-
-            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-            File file = new File(resourcePath + "newImage");
-            File newFile = new File(resourcePath + "order" + orderId + ".jpeg");
-            file.renameTo(newFile);
-
-            System.out.println("Order. Изменение состояния на FALSE в OrderController при ИЗМЕНЕНИИ");
-            isReady = false;
-            System.out.println("Upload. Изменение состояния isVisited на FALSE");
-            isVisited = false;
-        }
 
         return "redirect:/client{clientId}/order{orderId}";
     }
 
     @PostMapping("/client{clientId}/order{orderId}/remove")
-    public String orderDelete(@PathVariable(value = "orderId") Long orderId) {
+    public String orderDelete(@PathVariable(value = "clientId") long clientId,
+                              @PathVariable(value = "orderId") Long orderId) {
 
         ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
         orderRepository.delete(clientOrder);
-
-        String photoPath = Paths.get("target" + File.separator + "classes" + File.separator
-                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator
-                + "order" + orderId + ".jpeg";
-        File userPhoto = new File(photoPath);
-        userPhoto.delete();
 
         return "redirect:/";
     }
 
     @PostMapping("/client{clientId}/order{orderId}/deletePhoto")
-    public String deletePhoto(@PathVariable(value = "clientId") Long clientId,
-                              @PathVariable(value = "orderId") Long orderId,
-                              @RequestParam("orderPhotoPath") String orderPhotoPath) {
+    public String deletePhoto(@PathVariable(value = "orderId") Long orderId) {
 
-        File userPhoto = new File(orderPhotoPath);
-        userPhoto.delete();
+        ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
+        clientOrder.setOrderPhoto(null);
+        orderRepository.save(clientOrder);
 
         return "redirect:/client{clientId}/order{orderId}";
     }

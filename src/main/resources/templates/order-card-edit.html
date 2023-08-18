@@ -16,14 +16,14 @@
 <div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <img th:src="${photoPath}" onerror="this.src='/images/defaultOrder.jpeg'; document.getElementById('photoDeleteForm').style.display='none';" alt="sorry" class="rounded img-thumbnail">
-            <input class="form-control mt-1" id="fileUpload" type="file" name="fileupload" onchange="visit();"/>
+            <img th:src="@{'data:image/png;base64, ' + ${orderPhoto}}" onerror="this.src='/images/defaultOrder.jpeg'; document.getElementById('photoDeleteForm').style.display='none';" alt="sorry" class="rounded img-thumbnail">
+            <input class="form-control mt-1" id="fileUploadId" type="file" name="fileupload"/>
             <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
 
             <form id="photoDeleteForm" th:action="@{|/client${clientId}/order${orderId}/deletePhoto|}" method="post">
-                <input type="hidden" name="orderPhotoPath" th:value="'target/classes/static/uploads/order' + ${orderId} + '.jpeg'">
-                <p id="id" th:value="${orderId}" style="display: none;"></p>
+                <input id="clientIdVar" th:value="${clientId}" style="display: none;">
+                <input id="orderIdVar" th:value="${orderId}" style="display: none;">
                 <input class="btn btn-light forButtons mt-1" type="submit" value="Удалить фото">
             </form>
         </div>
@@ -31,28 +31,28 @@
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Редактирование карточки заказа</h4>
 
-            <form class="needs-validation" novalidate="" method="post">
+
 
                 <div th:each="el : ${order}">
                     <div class="row g-3">
                         <div class="col-sm-6">
-                            <label for="category" class="form-label">Категория</label>
-                            <input type="text" th:value="${el.category}" name="category" class="form-control" id="category" maxlength="250">
+                            <label for="categoryId" class="form-label">Категория</label>
+                            <input type="text" th:value="${el.category}" name="category" class="form-control" id="categoryId" maxlength="250">
                         </div>
 
                         <div class="col-sm-6">
-                            <label for="brand" class="form-label">Бренд</label>
-                            <input type="text" th:value="${el.brand}" name="brand" class="form-control" id="brand" maxlength="250">
+                            <label for="brandId" class="form-label">Бренд</label>
+                            <input type="text" th:value="${el.brand}" name="brand" class="form-control" id="brandId" maxlength="250">
                         </div>
 
                         <div class="col-sm-6">
-                            <label for="size" class="form-label">Размер</label>
-                            <input type="text" th:value="${el.size}" name="size" class="form-control" id="size" maxlength="16">
+                            <label for="sizeId" class="form-label">Размер</label>
+                            <input type="text" th:value="${el.size}" name="size" class="form-control" id="sizeId" maxlength="16">
                         </div>
 
                         <div class="col-sm-6">
-                            <label for="color" class="form-label">Цвет</label>
-                            <input type="text" th:value="${el.color}" name="color" class="form-control" id="color" maxlength="32">
+                            <label for="colorId" class="form-label">Цвет</label>
+                            <input type="text" th:value="${el.color}" name="color" class="form-control" id="colorId" maxlength="32">
                         </div>
 
                     </div>
@@ -61,8 +61,8 @@
 
                     <div class="row g-3">
                         <div class="col-sm-6">
-                            <label for="orderDate" class="form-label">Дата оплаты заказа</label>
-                            <input type="date" th:value="${el.orderDate}" name="orderDate" class="form-control" id="orderDate">
+                            <label for="orderDateId" class="form-label">Дата оплаты заказа</label>
+                            <input type="date" th:value="${el.orderDate}" name="orderDate" class="form-control" id="orderDateId">
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
 
                     <h4 class="mb-3">Общее описание</h4>
 
-                    <textarea th:text="${el.description}" name="description" class="form-control" rows="10" maxlength="4000"></textarea><br>
+                    <textarea th:text="${el.description}" name="description" class="form-control" id="descriptionId" rows="10" maxlength="4000"></textarea><br>
                 </div>
 
                 <div class="row">
@@ -79,10 +79,10 @@
                     <div class="col-sm-3 col-sm-offset-3"></div>
 
                     <div class="col-sm-3">
-                        <button class="w-100 btn btn-light forButtons" type="submit" onclick="uploadFile();">Обновить</button>
+                        <button class="w-100 btn btn-light forButtons" type="submit" onclick="updateOrder();">Обновить</button>
                     </div>
                 </div>
-            </form>
+
 
 
             <div class="row mt-1">
@@ -103,58 +103,55 @@
     </div>
 
     <script>
-        async function visit() {
-            let file = fileUpload.files[0];
+        async function updateOrder() {
             let formData = new FormData();
-            if (file) {
-                formData.append("isVisited", true);
-            }
-            else {
-                formData.append("isVisited", false);
-            }
-            let visit = await fetch('/orderVisit', {
-                method: "POST",
-                body: formData
-            });
-        }
-    </script>
 
-    <script>
-        async function uploadFile() {
-            let file = fileUpload.files[0];
-            if (!file) {
-                return;
-            }
-            let formData = new FormData();
-            formData.append("file", file);
-            let response = await fetch('/uploadOrderPhoto', {
+            const clientId = document.getElementById('clientIdVar');
+            const orderId = document.getElementById('orderIdVar');
+            const category = document.getElementById('categoryId');
+            const brand = document.getElementById('brandId');
+            const size = document.getElementById('sizeId');
+            const color = document.getElementById('colorId');
+            const orderDate = document.getElementById('orderDateId');
+            const description = document.getElementById('descriptionId');
+            let fileUpload = document.getElementById('fileUploadId');
+
+            formData.append("clientId", clientId.value);
+            formData.append("orderId", orderId.value);
+            formData.append("category", category.value);
+            formData.append("brand", brand.value);
+            formData.append("size", size.value);
+            formData.append("color", color.value);
+            formData.append("orderDate", orderDate.value);
+            formData.append("description", description.value);
+            formData.append("file", fileUpload.files[0]);
+
+            const fetchURL = '/client' + clientId.value + '/order' + orderId.value + '/edit';
+            const redirectURL = '/client' + clientId.value + '/order' + orderId.value;
+
+            console.log(fetchURL);
+            console.log(redirectURL);
+
+            let response = await fetch(fetchURL, {
                 method: "POST",
                 body: formData
             });
+
+            window.location.replace(redirectURL);
         }
     </script>
 
     <script>
         function previewImage() {
-            // Получаем ссылку на элемент input, который содержит загруженное изображение
-            let input = document.getElementById('fileUpload');
-
-            // Получаем ссылку на элемент img, который будет отображать изображение
+            let input = document.getElementById('fileUploadId');
             let preview = document.getElementById('image');
-
-            // Создаем объект FileReader для чтения содержимого файла
             let reader = new FileReader();
 
-            // Устанавливаем обработчик события onload, который будет вызван, когда файл будет успешно прочитан
             reader.onload = function() {
-                // Устанавливаем путь к загруженному изображению в атрибут src элемента img
                 preview.src = reader.result;
-
-                // Отображаем элемент img
                 preview.style.display = 'block';
             }
 
-            // Читаем содержимое выбранного файла, заданным в input
             reader.readAsDataURL(input.files[0]);
         }
     </script>

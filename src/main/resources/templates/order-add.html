@@ -16,34 +16,36 @@
 <div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <input class="form-control" id="fileUpload" type="file" name="fileupload" onchange="visit()"/>
+            <input class="form-control" id="fileUploadId" type="file" name="fileupload"/>
             <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
         </div>
 
+        <input id="clientIdVar" th:value="${clientId}" style="display: none;"/>
+
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Создание карточки заказа</h4>
 
-            <form th:action="@{|/client${clientId}/new-order|}" class="needs-validation" novalidate="" method="post">
+
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <label for="category" class="form-label">Категория</label>
-                        <input type="text" name="category" class="form-control" id="category" maxlength="120">
+                        <label for="categoryId" class="form-label">Категория</label>
+                        <input type="text" name="category" class="form-control" id="categoryId" maxlength="120">
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="brand" class="form-label">Бренд</label>
-                        <input type="text" name="brand" class="form-control" id="brand" maxlength="120">
+                        <label for="brandId" class="form-label">Бренд</label>
+                        <input type="text" name="brand" class="form-control" id="brandId" maxlength="120">
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="size" class="form-label">Размер</label>
-                        <input type="text" name="size" class="form-control" id="size" maxlength="16">
+                        <label for="sizeId" class="form-label">Размер</label>
+                        <input type="text" name="size" class="form-control" id="sizeId" maxlength="16">
                     </div>
 
                     <div class="col-sm-6">
-                        <label for="color" class="form-label">Цвет</label>
-                        <input type="text" name="color" class="form-control" id="color" maxlength="32">
+                        <label for="colorId" class="form-label">Цвет</label>
+                        <input type="text" name="color" class="form-control" id="colorId" maxlength="32">
                     </div>
 
                 </div>
@@ -52,8 +54,8 @@
 
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <label for="orderDate" class="form-label">Дата оплаты заказа</label>
-                        <input type="date" name="orderDate" class="form-control" id="orderDate">
+                        <label for="orderDateId" class="form-label">Дата оплаты заказа</label>
+                        <input type="date" name="orderDate" class="form-control" id="orderDateId">
                     </div>
                 </div>
 
@@ -61,66 +63,61 @@
 
                 <h4 class="mb-3">Общее описание</h4>
 
-                <textarea name="description" class="form-control" rows="10" maxlength="4000"></textarea><br>
+                <textarea name="description" class="form-control" id="descriptionId" rows="10" maxlength="4000"></textarea><br>
 
-                <button class="w-100 btn btn-light forButtons" onclick="uploadFile();" type="submit">Добавить заказ</button>
-            </form>
+                <button class="w-100 btn btn-light forButtons" onclick="addOrder();" type="submit">Добавить заказ</button>
+
         </div>
     </div>
 
     <script>
-        async function visit() {
-            let file = fileUpload.files[0];
+        async function addOrder() {
             let formData = new FormData();
-            if (file) {
-                formData.append("isVisited", true);
-            }
-            else {
-                formData.append("isVisited", false);
-            }
-            let visit = await fetch('/orderVisit', {
-                method: "POST",
-                body: formData
-            });
-        }
-    </script>
 
-    <script>
-        async function uploadFile() {
-            let file = fileUpload.files[0];
-            if (!file) {
-                return;
-            }
-            let formData = new FormData();
-            formData.append("file", file);
-            let response = await fetch('/uploadOrderPhoto', {
+            const clientId = document.getElementById('clientIdVar');
+            const category = document.getElementById('categoryId');
+            const brand = document.getElementById('brandId');
+            const size = document.getElementById('sizeId');
+            const color = document.getElementById('colorId');
+            const orderDate = document.getElementById('orderDateId');
+            const description = document.getElementById('descriptionId');
+            let fileUpload = document.getElementById('fileUploadId');
+
+            formData.append("clientId", clientId.value);
+            formData.append("category", category.value);
+            formData.append("brand", brand.value);
+            formData.append("size", size.value);
+            formData.append("color", color.value);
+            formData.append("orderDate", orderDate.value);
+            formData.append("description", description.value);
+            formData.append("file", fileUpload.files[0]);
+
+            const fetchURL = '/client' + clientId.value + '/new-order';
+            const redirectURL = '/client' + clientId.value;
+
+            console.log(fetchURL);
+            console.log(redirectURL);
+
+            let response = await fetch(fetchURL, {
                 method: "POST",
                 body: formData
             });
+
+            window.location.replace(redirectURL);
         }
     </script>
 
     <script>
         function previewImage() {
-            // Получаем ссылку на элемент input, который содержит загруженное изображение
-            let input = document.getElementById('fileUpload');
-
-            // Получаем ссылку на элемент img, который будет отображать изображение
+            let input = document.getElementById('fileUploadId');
             let preview = document.getElementById('image');
-
-            // Создаем объект FileReader для чтения содержимого файла
             let reader = new FileReader();
 
-            // Устанавливаем обработчик события onload, который будет вызван, когда файл будет успешно прочитан
             reader.onload = function() {
-                // Устанавливаем путь к загруженному изображению в атрибут src элемента img
                 preview.src = reader.result;
-
-                // Отображаем элемент img
                 preview.style.display = 'block';
             }
 
-            // Читаем содержимое выбранного файла, заданным в input
             reader.readAsDataURL(input.files[0]);
         }
     </script>

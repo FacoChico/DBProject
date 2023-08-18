@@ -16,7 +16,7 @@
 <div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <img th:src="${photoPath}" onerror="this.src='/images/defaultImage.jpeg';" alt="sorry" class="rounded img-thumbnail">
+            <img th:src="@{'data:image/png;base64, ' + ${clientPhoto}}" onerror="this.src='/images/defaultImage.jpeg';" alt="sorry" class="rounded img-thumbnail">
         </div>
 
         <div class="col-md-7 col-lg-8">
@@ -113,8 +113,6 @@
         </main>
 
     </div>
-
-
 
     <script>
         const tableRows = document.querySelectorAll('tr[clientHref]');

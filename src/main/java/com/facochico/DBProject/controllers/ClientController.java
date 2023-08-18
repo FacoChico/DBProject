@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +30,6 @@ public class ClientController {
     private AdditionalClientInfoRepository additionalClientInfoRepository;
     @Autowired
     private OrderRepository orderRepository;
-    public static volatile boolean isReady = false;
-    public static volatile boolean isVisited = false;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -52,34 +52,36 @@ public class ClientController {
     }
 
     @PostMapping("/add")
-    public String addClient(@RequestParam String name, @RequestParam String patronymic,
-                            @RequestParam String surname, @RequestParam String sex, @RequestParam String phoneNumber,
-                            @RequestParam String bDay, @RequestParam String socialStatus,
-                            @RequestParam String clothSize, @RequestParam String footSize,
-                            @RequestParam String lastMsg, @RequestParam String lastPurchase,
-                            @RequestParam String description) {
+    public String addClient(@RequestParam("firstName") String name, @RequestParam("patronymic") String patronymic,
+                            @RequestParam("lastName") String surname, @RequestParam("sex") String sex,
+                            @RequestParam("phoneNumber") String phoneNumber, @RequestParam("birthDay") String bDay,
+                            @RequestParam("socialStatus") String socialStatus, @RequestParam("clothSize") String clothSize,
+                            @RequestParam("footSize") String footSize, @RequestParam("lastMsg") String lastMsg,
+                            @RequestParam("lastPurchaseDate") String lastPurchase, @RequestParam("description") String description,
+                            @RequestParam(value = "file", required = false) MultipartFile file) {
 
         Client client = new Client(name, patronymic, surname, sex, phoneNumber, bDay);
         clientRepository.save(client);
 
+        byte[] clientPhoto = null;
+
+        if (file != null) {
+            try {
+                clientPhoto = new byte[file.getBytes().length];
+                int i = 0;
+                for (byte b : file.getBytes()) {
+                    clientPhoto[i++] = b;
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), socialStatus,
-                clothSize, footSize, lastMsg, lastPurchase, description);
+                clothSize, footSize, lastMsg, lastPurchase, description, clientPhoto);
         additionalClientInfoRepository.save(additionalClientInfo);
 
-        if (isVisited) {
-            while (!isReady) Thread.onSpinWait();
-
-            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-            File file = new File(resourcePath + "newImage");
-            File newFile = new File(resourcePath + "client" + client.getId() + ".jpeg");
-            file.renameTo(newFile);
-
-            System.out.println("Client. Изменение состояния на FALSE в ClientController при СОЗДАНИИ");
-            isReady = false;
-            System.out.println("Upload. Изменение состояния isVisited на FALSE");
-            isVisited = false;
-        }
 
         return "redirect:/";
     }
@@ -93,8 +95,11 @@ public class ClientController {
 
         model.addAttribute("title", "Карточка клиента");
 
-        String photoPath = File.separator + Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
-        model.addAttribute("photoPath", photoPath);
+        if(additionalClientInfoRepository.findById(id).get().getClientPhoto() != null) {
+            byte[] encodeBase64 = Base64.getEncoder().encode(additionalClientInfoRepository.findById(id).get().getClientPhoto());
+            String clientPhoto = new String(encodeBase64, StandardCharsets.UTF_8);
+            model.addAttribute("clientPhoto", clientPhoto);
+        }
 
         Optional<Client> client = clientRepository.findById(id);
         ArrayList<Client> res = new ArrayList<>();
@@ -121,8 +126,11 @@ public class ClientController {
 
         model.addAttribute("title", "Редактирование карточки");
 
-        String photoPath = File.separator + Paths.get("uploads") + File.separator + "client" + id + ".jpeg";
-        model.addAttribute("photoPath", photoPath);
+        if(additionalClientInfoRepository.findById(id).get().getClientPhoto() != null) {
+            byte[] encodeBase64 = Base64.getEncoder().encode(additionalClientInfoRepository.findById(id).get().getClientPhoto());
+            String clientPhoto = new String(encodeBase64, StandardCharsets.UTF_8);
+            model.addAttribute("clientPhoto", clientPhoto);
+        }
 
         Optional<Client> client = clientRepository.findById(id);
         ArrayList<Client> res = new ArrayList<>();
@@ -140,12 +148,14 @@ public class ClientController {
     }
 
     @PostMapping("/client{id}/edit")
-    public String clientUpdate(@PathVariable(value = "id") long id, @RequestParam String name,
-                               @RequestParam String patronymic, @RequestParam String surname, @RequestParam String sex,
-                               @RequestParam String phoneNumber, @RequestParam String bDay,
-                               @RequestParam String socialStatus, @RequestParam String clothSize,
-                               @RequestParam String footSize,  @RequestParam String lastMsg,
-                               @RequestParam String lastPurchase, @RequestParam String description) {
+    public String clientUpdate(@PathVariable("id") long id,
+                               @RequestParam("firstName") String name, @RequestParam("patronymic") String patronymic,
+                               @RequestParam("lastName") String surname, @RequestParam("sex") String sex,
+                               @RequestParam("phoneNumber") String phoneNumber, @RequestParam("birthDay") String bDay,
+                               @RequestParam("socialStatus") String socialStatus, @RequestParam("clothSize") String clothSize,
+                               @RequestParam("footSize") String footSize, @RequestParam("lastMsg") String lastMsg,
+                               @RequestParam("lastPurchaseDate") String lastPurchase, @RequestParam("description") String description,
+                               @RequestParam(value = "file", required = false) MultipartFile file) {
 
         Client client = clientRepository.findById(id).orElseThrow(); // orElseThrow() выбрасывает исключение в случае, если запись была не найдена
 
@@ -159,6 +169,21 @@ public class ClientController {
 
         AdditionalClientInfo additionalClientInfo = additionalClientInfoRepository.findById(id).orElseThrow();
 
+        byte[] clientPhoto = null;
+
+        if (file != null) {
+            try {
+                clientPhoto = new byte[file.getBytes().length];
+                int i = 0;
+                for (byte b : file.getBytes()) {
+                    clientPhoto[i++] = b;
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         additionalClientInfo.setSocialStatus(socialStatus);
         additionalClientInfo.setClothSize(clothSize);
         additionalClientInfo.setFootSize(footSize);
@@ -166,22 +191,10 @@ public class ClientController {
         additionalClientInfo.setLastPurchase(lastPurchase);
         additionalClientInfo.setDescription(description);
 
+        if (clientPhoto != null)
+            additionalClientInfo.setClientPhoto(clientPhoto);
+
         additionalClientInfoRepository.save(additionalClientInfo);
-
-        if (isVisited) {
-            while (!isReady) Thread.onSpinWait();
-
-            String resourcePath = Paths.get("target" + File.separator + "classes" + File.separator
-                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator;
-            File file = new File(resourcePath + "newImage");
-            File newFile = new File(resourcePath + "client" + id + ".jpeg");
-            file.renameTo(newFile);
-
-            System.out.println("Client. Изменение состояния на FALSE в ClientController при ИЗМЕНЕНИИ");
-            isReady = false;
-            System.out.println("Upload. Изменение состояния isVisited на FALSE");
-            isVisited = false;
-        }
 
         return "redirect:/client{id}";
     }
@@ -196,36 +209,17 @@ public class ClientController {
         additionalClientInfoRepository.delete(additionalClientInfo);
 
         List<ClientOrder> clientOrders = orderRepository.findByClientId(id);
-        deleteClientOrderPhotos(clientOrders);
         orderRepository.deleteAll(clientOrders);
-
-        String photoPath = Paths.get("target" + File.separator + "classes" + File.separator
-                + "static" + File.separator + "uploads").toAbsolutePath() + File.separator
-                + "client" + id + ".jpeg";
-        File userPhoto = new File(photoPath);
-        userPhoto.delete();
 
         return "redirect:/";
     }
 
-    void deleteClientOrderPhotos(List<ClientOrder> clientOrders) {
-        String photoPath;
-        File userPhoto;
-
-        for (ClientOrder order : clientOrders) {
-            photoPath = Paths.get("target" + File.separator + "classes" + File.separator
-                    + "static" + File.separator + "uploads").toAbsolutePath() + File.separator
-                    + "order" + order.getId() + ".jpeg";
-            userPhoto = new File(photoPath);
-            userPhoto.delete();
-        }
-    }
-
     @PostMapping("/client{id}/deletePhoto")
-    public String deletePhoto(@PathVariable(value = "id") long id, @RequestParam("clientPhotoPath") String clientPhotoPath) {
+    public String deletePhoto(@PathVariable(value = "id") long id) {
 
-        File userPhoto = new File(clientPhotoPath);
-        userPhoto.delete();
+        AdditionalClientInfo additionalClientInfo = additionalClientInfoRepository.findById(id).orElseThrow();
+        additionalClientInfo.setClientPhoto(null);
+        additionalClientInfoRepository.save(additionalClientInfo);
 
         return "redirect:/client{id}";
     }

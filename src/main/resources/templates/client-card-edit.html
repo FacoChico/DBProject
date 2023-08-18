@@ -16,17 +16,15 @@
 <div class="container mt-4 forText" style="min-height: 600px">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
-            <img th:src="${photoPath}"
-                 onerror="this.src='/images/defaultImage.jpeg'; document.getElementById('photoDeleteForm').style.display='none';"
+            <img th:src="@{'data:image/png;base64, ' + ${clientPhoto}}" onerror="this.src='/images/defaultImage.jpeg'; document.getElementById('photoDeleteForm').style.display='none';"
                  alt="sorry" class="rounded img-thumbnail">
 
-            <input class="form-control mt-1" id="fileUpload" type="file" name="fileupload" onchange="visit()"/>
+            <input class="form-control mt-1" id="fileUploadId" type="file" name="fileupload"/>
             <button class="btn btn-light forButtons mt-1" id="upload-button" onclick="previewImage();">Посмотреть изображение</button>
             <img id="image" style="display:none" class="img img-thumbnail">
 
             <form id="photoDeleteForm" th:action="@{|/client${clientId}/deletePhoto|}" method="post">
-                <input type="hidden" name="clientPhotoPath" th:value="'target/classes/static/uploads/client' + ${clientId} + '.jpeg'">
-                <p id="id" th:value="${clientId}" style="display: none;"></p>
+                <input id="clientIdVar" th:value="${clientId}" style="display: none;">
                 <input class="btn btn-light forButtons mt-1" type="submit" value="Удалить фото">
             </form>
         </div>
@@ -34,45 +32,25 @@
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">Основная информация</h4>
 
-            <form class="needs-validation" novalidate="" method="post">
-                <div th:each="el : ${client}">
-                    <div th:each="elAddit : ${additionalClientInfo}">
-                        <div class="row g-3">
-                            <div class="col-sm-6">
-                                <label for="firstName" class="form-label">Имя</label>
-                                <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstName" maxlength="20">
-                                <div class="invalid-feedback">
-                                    Введите корректное имя
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="lastName" class="form-label">Фамилия</label>
-                                <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastName" maxlength="20">
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="patronymic" class="form-label">Отчество</label>
-                                <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymic" maxlength="20">
+            <div th:each="el : ${client}">
+                <div th:each="elAddit : ${additionalClientInfo}">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstNameId" class="form-label">Имя</label>
+                            <input type="text" th:value="${el.name}" name="name" class="form-control" id="firstNameId" maxlength="20">
+                            <div class="invalid-feedback">
+                                Введите корректное имя
                             </div>
                         </div>
 
-                        <hr class="my-4">
+                        <div class="col-sm-6">
+                            <label for="patronymicId" class="form-label">Отчество</label>
+                            <input type="text" th:value="${el.patronymic}" name="patronymic" class="form-control" id="patronymicId" maxlength="20">
+                        </div>
 
-                        <div class="row g-3">
-                            <div class="col-sm-6">
-                                <label for="sex" class="form-label">Пол</label>
-                                <select name="sex" class="form-control" id="sex">
-                                    <option value="Не выбрано" th:selected="${el.sex =='Не выбрано'}">Не выбрано</option>
-                                    <option value="Мужской" th:selected="${el.sex =='Мужской'}">Мужской</option>
-                                    <option value="Женский" th:selected="${el.sex =='Женский'}">Женский</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-6">
-                                <label for="socialStatus" class="form-label">Социальный статус</label>
-                                <input type="text" th:value="${elAddit.socialStatus}" name="socialStatus" class="form-control" id="socialStatus" maxlength="250">
-                            </div>
+                        <div class="col-sm-6">
+                            <label for="lastNameId" class="form-label">Фамилия</label>
+                            <input type="text" th:value="${el.surname}" name="surname" class="form-control" id="lastNameId" maxlength="20">
                         </div>
 
                     </div>
@@ -81,62 +59,81 @@
 
                     <div class="row g-3">
                         <div class="col-sm-6">
-                            <label for="phoneNumber" class="form-label">Номер телефона</label>
-                            <input type="text" th:value="${el.phoneNumber}" name="phoneNumber" class="form-control" id="phoneNumber" maxlength="20">
+                            <label for="sexId" class="form-label">Пол</label>
+                            <select name="sex" class="form-control" id="sexId">
+                                <option value="Не выбрано" th:selected="${el.sex =='Не выбрано'}">Не выбрано</option>
+                                <option value="Мужской" th:selected="${el.sex =='Мужской'}">Мужской</option>
+                                <option value="Женский" th:selected="${el.sex =='Женский'}">Женский</option>
+                            </select>
                         </div>
 
                         <div class="col-sm-6">
-                            <label for="birthDay" class="form-label">Дата рождения</label>
-                            <input type="date" th:value="${el.bDay}" name="bDay" class="form-control" id="birthDay">
+                            <label for="socialStatusId" class="form-label">Социальный статус</label>
+                            <input type="text" th:value="${elAddit.socialStatus}" name="socialStatus" class="form-control" id="socialStatusId" maxlength="250">
                         </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4">
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="phoneNumberId" class="form-label">Номер телефона</label>
+                        <input type="text" th:value="${el.phoneNumber}" name="phoneNumber" class="form-control" id="phoneNumberId" maxlength="20">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="birthDayId" class="form-label">Дата рождения</label>
+                        <input type="date" th:value="${el.bDay}" name="bDay" class="form-control" id="birthDayId">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div th:each="el : ${additionalClientInfo}">
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="footSizeId" class="form-label">Размер обуви</label>
+                        <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="footSizeId" maxlength="16">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="clothSizeId" class="form-label">Размер одежды</label>
+                        <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothSizeId" maxlength="16">
+                    </div>
+                </div>
+
+                    <hr class="my-4">
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="lastMsgId" class="form-label">Дата последнего сообщения</label>
+                        <input type="date" th:value="${el.lastMsg}" name="lastMsg" class="form-control" id="lastMsgId">
+                    </div>
+
+                    <div class="col-sm-6">
+                        <label for="lastPurchaseDateId" class="form-label">Дата последней покупки</label>
+                        <input type="date" th:value="${el.lastPurchase}" name="lastPurchase" class="form-control" id="lastPurchaseDateId">
                     </div>
                 </div>
 
                 <hr class="my-4">
 
-                <div th:each="el : ${additionalClientInfo}">
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="foot_size" class="form-label">Размер обуви</label>
-                            <input type="text" th:value="${el.footSize}" name="footSize" class="form-control" id="foot_size" maxlength="16">
-                        </div>
+                <h4 class="mb-3">Общее описание</h4>
+                <textarea name="description" th:text="${el.description}" class="form-control" id="descriptionId" rows="10" maxlength="4000"></textarea><br>
+            </div>
 
-                        <div class="col-sm-6">
-                            <label for="clothe_size" class="form-label">Размер одежды</label>
-                            <input type="text" th:value="${el.clothSize}" name="clothSize" class="form-control" id="clothe_size" maxlength="16">
-                        </div>
-                    </div>
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3 col-sm-offset-3"></div>
 
-                        <hr class="my-4">
-
-                    <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="last_message_date" class="form-label">Дата последнего сообщения</label>
-                            <input type="date" th:value="${el.lastMsg}" name="lastMsg" class="form-control" id="last_message_date">
-                        </div>
-
-                        <div class="col-sm-6">
-                            <label for="last_purchase_date" class="form-label">Дата последней покупки</label>
-                            <input type="date" th:value="${el.lastPurchase}" name="lastPurchase" class="form-control" id="last_purchase_date">
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <h4 class="mb-3">Общее описание</h4>
-                    <textarea name="description" th:text="${el.description}" class="form-control" rows="10" maxlength="4000"></textarea><br>
+                <div class="col-sm-3">
+                    <button class="w-100 btn btn-light forButtons" type="submit" onclick="updateClient();">Обновить</button>
                 </div>
-
-                <div class="row">
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-3"></div>
-                    <div class="col-sm-3 col-sm-offset-3"></div>
-
-                    <div class="col-sm-3">
-                        <button class="w-100 btn btn-light forButtons" type="submit" onclick="uploadFile();">Обновить</button>
-                    </div>
-                </div>
-            </form>
+            </div>
 
             <div class="row mt-1">
                 <div class="col-sm-3"></div>
@@ -155,58 +152,62 @@
     </div>
 
     <script>
-        async function visit() {
-            let file = fileUpload.files[0];
+        async function updateClient() {
             let formData = new FormData();
-            if (file) {
-                formData.append("isVisited", true);
-            }
-            else {
-                formData.append("isVisited", false);
-            }
-            let visit = await fetch('/clientVisit', {
-                method: "POST",
-                body: formData
-            });
-        }
-    </script>
 
-    <script>
-        async function uploadFile() {
-            let file = fileUpload.files[0];
-            if (!file) {
-                return;
-            }
-            let formData = new FormData();
-            formData.append("file", file);
-            let response = await fetch('/uploadClientPhoto', {
+            const clientId = document.getElementById('clientIdVar');
+            const firstName = document.getElementById('firstNameId');
+            const patronymic = document.getElementById('patronymicId');
+            const lastName = document.getElementById('lastNameId');
+            const sex = document.getElementById('sexId');
+            const socialStatus = document.getElementById('socialStatusId');
+            const phoneNumber = document.getElementById('phoneNumberId');
+            const birthDay = document.getElementById('birthDayId');
+            const footSize = document.getElementById('footSizeId');
+            const clothSize = document.getElementById('clothSizeId');
+            const lastMsg = document.getElementById('lastMsgId');
+            const lastPurchaseDate = document.getElementById('lastPurchaseDateId');
+            const description = document.getElementById('descriptionId');
+            let fileUpload = document.getElementById('fileUploadId')
+
+            formData.append("id", clientId.value);
+            formData.append("firstName", firstName.value);
+            formData.append("patronymic", patronymic.value);
+            formData.append("lastName", lastName.value);
+            formData.append("sex", sex.value);
+            formData.append("socialStatus", socialStatus.value);
+            formData.append("phoneNumber", phoneNumber.value);
+            formData.append("birthDay", birthDay.value);
+            formData.append("footSize", footSize.value);
+            formData.append("clothSize", clothSize.value);
+            formData.append("lastMsg", lastMsg.value);
+            formData.append("lastPurchaseDate", lastPurchaseDate.value);
+            formData.append("description", description.value);
+            formData.append("file", fileUpload.files[0]);
+
+            const fetchURL = "/client" + clientId.value + "/edit";
+            const redirectURL = "/client" + clientId.value;
+
+            let response = await fetch(fetchURL, {
                 method: "POST",
                 body: formData
             });
+
+            window.location.replace(redirectURL);
         }
     </script>
 
     <script>
         function previewImage() {
-            // Получаем ссылку на элемент input, который содержит загруженное изображение
-            let input = document.getElementById('fileUpload');
-
-            // Получаем ссылку на элемент img, который будет отображать изображение
+            let input = document.getElementById('fileUploadId');
             let preview = document.getElementById('image');
-
-            // Создаем объект FileReader для чтения содержимого файла
             let reader = new FileReader();
 
-            // Устанавливаем обработчик события onload, который будет вызван, когда файл будет успешно прочитан
             reader.onload = function() {
-                // Устанавливаем путь к загруженному изображению в атрибут src элемента img
                 preview.src = reader.result;
-
-                // Отображаем элемент img
                 preview.style.display = 'block';
             }
 
-            // Читаем содержимое выбранного файла, заданным в input
             reader.readAsDataURL(input.files[0]);
         }
     </script>

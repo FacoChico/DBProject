@@ -4,6 +4,7 @@ package com.facochico.DBProject.models;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 
 @Entity
 public class AdditionalClientInfo {
@@ -17,8 +18,11 @@ public class AdditionalClientInfo {
     private String lastPurchase;
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] clientPhoto;
 
-    public AdditionalClientInfo(Long id, String socialStatus, String clothSize, String footSize, String lastMsg, String lastPurchase, String description) {
+    public AdditionalClientInfo(Long id, String socialStatus, String clothSize, String footSize, String lastMsg, String lastPurchase, String description, byte[] clientPhoto) {
         this.id = id;
         this.socialStatus = socialStatus;
         this.clothSize = clothSize;
@@ -26,6 +30,7 @@ public class AdditionalClientInfo {
         this.lastMsg = lastMsg;
         this.description = description;
         this.lastPurchase = lastPurchase;
+        this.clientPhoto = clientPhoto;
     }
 
     public AdditionalClientInfo() {
@@ -85,5 +90,13 @@ public class AdditionalClientInfo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getClientPhoto() {
+        return clientPhoto;
+    }
+
+    public void setClientPhoto(byte[] clientPhoto) {
+        this.clientPhoto = clientPhoto;
     }
 }

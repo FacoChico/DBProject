@@ -1,7 +1,6 @@
 package com.facochico.DBProject.models;
 
 import jakarta.persistence.*;
-import org.springframework.stereotype.Controller;
 
 @Entity
 public class ClientOrder {
@@ -17,8 +16,11 @@ public class ClientOrder {
     private String orderDate;
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] orderPhoto;
 
-    public ClientOrder(Long clientId, String category, String brand, String size, String color, String orderDate, String description) {
+    public ClientOrder(Long clientId, String category, String brand, String size, String color, String orderDate, String description, byte[] orderPhoto) {
         this.clientId = clientId;
         this.category = category;
         this.brand = brand;
@@ -26,6 +28,7 @@ public class ClientOrder {
         this.color = color;
         this.orderDate = orderDate;
         this.description = description;
+        this.orderPhoto = orderPhoto;
     }
 
     public ClientOrder() {}
@@ -92,5 +95,13 @@ public class ClientOrder {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getOrderPhoto() {
+        return orderPhoto;
+    }
+
+    public void setOrderPhoto(byte[] orderPhoto) {
+        this.orderPhoto = orderPhoto;
     }
 }
