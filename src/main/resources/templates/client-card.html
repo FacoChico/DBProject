@@ -10,7 +10,7 @@
 
 <body>
 <!-- Шапка страницы -->
-<header th:insert="/blocks/header :: header"></header>
+<header th:insert="blocks/header :: header"></header>
 
 <!-- Тело страницы -->
 <div class="container mt-4 forText" style="min-height: 600px">
@@ -84,7 +84,6 @@
         <h3>Заказы</h3>
 
         <main class="my-4 col-lg-8 col-sm-offset-3">
-
             <div class="table-responsive">
                 <table class="table table-hover table-striped table-sm forTables">
                     <thead>
@@ -109,7 +108,6 @@
             <div th:each="el : ${client}">
                 <a th:href="'/client' + ${el.id} + '/new-order'" class="btn btn-light forButtons">Новый заказ</a>
             </div>
-
         </main>
 
     </div>
@@ -127,6 +125,6 @@
 </div>
 
 <!-- Футер страницы -->
-<footer th:insert="/blocks/footer :: footer"></footer>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

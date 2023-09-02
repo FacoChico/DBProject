@@ -10,7 +10,7 @@
 
 <body>
 <!-- Шапка страницы -->
-<header th:insert="/blocks/header :: header"></header>
+<header th:insert="blocks/header :: header"></header>
 
 <!-- Тело страницы -->
 <div class="container mt-4 forText" style="min-height: 600px">
@@ -112,7 +112,6 @@
             <textarea name="description" class="form-control" id="descriptionId" rows="10" maxlength="4000"></textarea><br>
 
             <button class="w-100 btn btn-light forButtons" onclick="addClient();">Добавить клиента</button>
-
         </div>
     </div>
 
@@ -179,6 +178,6 @@
 </div>
 
 <!-- Футер страницы -->
-<footer th:insert="/blocks/footer :: footer"></footer>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

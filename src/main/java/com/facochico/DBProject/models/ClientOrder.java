@@ -13,6 +13,7 @@ public class ClientOrder {
     private String brand;
     private String size;
     private String color;
+    private String price;
     private String orderDate;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -20,12 +21,14 @@ public class ClientOrder {
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] orderPhoto;
 
-    public ClientOrder(Long clientId, String category, String brand, String size, String color, String orderDate, String description, byte[] orderPhoto) {
+    public ClientOrder(Long clientId, String category, String brand,String size, String color,
+                       String price, String orderDate, String description, byte[] orderPhoto) {
         this.clientId = clientId;
         this.category = category;
         this.brand = brand;
         this.size = size;
         this.color = color;
+        this.price = price;
         this.orderDate = orderDate;
         this.description = description;
         this.orderPhoto = orderPhoto;
@@ -79,6 +82,14 @@ public class ClientOrder {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public String getOrderDate() {

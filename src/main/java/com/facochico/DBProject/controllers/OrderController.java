@@ -33,7 +33,6 @@ public class OrderController {
     public String newOrderMapping(@PathVariable(value = "clientId") Long clientId, Model model) {
         model.addAttribute("title", "Создание заказа");
         model.addAttribute("clientId", clientId);
-        System.out.println("ID: " + clientId);
         return "order-add";
     }
 
@@ -41,7 +40,8 @@ public class OrderController {
     public String newOrder(@PathVariable(value = "clientId") long clientId,
                            @RequestParam("category") String category, @RequestParam("brand") String brand,
                            @RequestParam("size") String size, @RequestParam("color") String color,
-                           @RequestParam("orderDate") String orderDate, @RequestParam("description") String description,
+                           @RequestParam("price") String price, @RequestParam("orderDate") String orderDate,
+                           @RequestParam("description") String description,
                            @RequestParam(value = "file", required = false) MultipartFile file) {
 
         byte[] orderPhoto = null;
@@ -59,7 +59,7 @@ public class OrderController {
             }
         }
 
-        ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, color, orderDate, description, orderPhoto);
+        ClientOrder clientOrder = new ClientOrder(clientId, category, brand, size, color, price, orderDate, description, orderPhoto);
         orderRepository.save(clientOrder);
 
 
@@ -91,6 +91,7 @@ public class OrderController {
         Optional<ClientOrder> order = orderRepository.findById(orderId);
         ArrayList<ClientOrder> res2 = new ArrayList<>();
         order.ifPresent(res2::add);
+        res2.get(0).setOrderDate(parseDate(res2.get(0).getOrderDate()));
         model.addAttribute("order", res2);
 
         return "order-card";
@@ -131,12 +132,11 @@ public class OrderController {
     public String orderUpdate(@PathVariable(value = "clientId") long clientId, @PathVariable(value = "orderId") Long orderId,
                               @RequestParam("category") String category, @RequestParam("brand") String brand,
                               @RequestParam("size") String size, @RequestParam("color") String color,
-                              @RequestParam("orderDate") String orderDate, @RequestParam("description") String description,
+                              @RequestParam("price") String price, @RequestParam("orderDate") String orderDate,
+                              @RequestParam("description") String description,
                               @RequestParam(value = "file", required = false) MultipartFile file) {
 
         ClientOrder clientOrder = orderRepository.findById(orderId).orElseThrow();
-
-        System.out.println("Here!!!");
 
         byte[] orderPhoto = null;
 
@@ -157,6 +157,7 @@ public class OrderController {
         clientOrder.setBrand(brand);
         clientOrder.setSize(size);
         clientOrder.setColor(color);
+        clientOrder.setPrice(price);
         clientOrder.setOrderDate(orderDate);
         clientOrder.setDescription(description);
 
@@ -186,5 +187,14 @@ public class OrderController {
         orderRepository.save(clientOrder);
 
         return "redirect:/client{clientId}/order{orderId}";
+    }
+
+    private String parseDate(String str) {
+
+        String year = str.substring(0, 4);
+        String month = str.substring(5, 7);
+        String day = str.substring(8);
+
+        return day + "." + month + "." + year;
     }
 }

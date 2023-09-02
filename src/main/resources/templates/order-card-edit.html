@@ -10,7 +10,7 @@
 
 <body>
 <!-- Шапка страницы -->
-<header th:insert="/blocks/header :: header"></header>
+<header th:insert="blocks/header :: header"></header>
 
 <!-- Тело страницы -->
 <div class="container mt-4 forText" style="min-height: 600px">
@@ -60,6 +60,11 @@
                     <hr class="my-4">
 
                     <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="priceId" class="form-label">Цена</label>
+                            <input type="text" name="orderDate" class="form-control" id="priceId">
+                        </div>
+
                         <div class="col-sm-6">
                             <label for="orderDateId" class="form-label">Дата оплаты заказа</label>
                             <input type="date" th:value="${el.orderDate}" name="orderDate" class="form-control" id="orderDateId">
@@ -112,6 +117,7 @@
             const brand = document.getElementById('brandId');
             const size = document.getElementById('sizeId');
             const color = document.getElementById('colorId');
+            const price = document.getElementById('priceId');
             const orderDate = document.getElementById('orderDateId');
             const description = document.getElementById('descriptionId');
             let fileUpload = document.getElementById('fileUploadId');
@@ -122,15 +128,13 @@
             formData.append("brand", brand.value);
             formData.append("size", size.value);
             formData.append("color", color.value);
+            formData.append("price", price.value);
             formData.append("orderDate", orderDate.value);
             formData.append("description", description.value);
             formData.append("file", fileUpload.files[0]);
 
             const fetchURL = '/client' + clientId.value + '/order' + orderId.value + '/edit';
             const redirectURL = '/client' + clientId.value + '/order' + orderId.value;
-
-            console.log(fetchURL);
-            console.log(redirectURL);
 
             let response = await fetch(fetchURL, {
                 method: "POST",
@@ -158,6 +162,6 @@
 </div>
 
 <!-- Футер страницы -->
-<footer th:insert="/blocks/footer :: footer"></footer>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>

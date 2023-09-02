@@ -104,11 +104,18 @@ public class ClientController {
         Optional<Client> client = clientRepository.findById(id);
         ArrayList<Client> res = new ArrayList<>();
         client.ifPresent(res::add);
+        // Приведение даты в формат дд/мм/гггг
+        res.get(0).setBDay(parseDate(res.get(0).getBDay()));
+
         model.addAttribute("client", res);
 
         Optional<AdditionalClientInfo> additionalClientInfo = additionalClientInfoRepository.findById(id);
         ArrayList<AdditionalClientInfo> res2 = new ArrayList<>();
         additionalClientInfo.ifPresent(res2::add);
+        // Приведение даты в формат дд/мм/гггг
+        res2.get(0).setLastMsg(parseDate(res2.get(0).getLastMsg()));
+        res2.get(0).setLastPurchase(parseDate(res2.get(0).getLastPurchase()));
+
         model.addAttribute("additionalClientInfo", res2);
 
         Iterable<ClientOrder> orders = orderRepository.findByClientId(id);
@@ -222,5 +229,14 @@ public class ClientController {
         additionalClientInfoRepository.save(additionalClientInfo);
 
         return "redirect:/client{id}";
+    }
+
+    private String parseDate(String str) {
+
+        String year = str.substring(0, 4);
+        String month = str.substring(5, 7);
+        String day = str.substring(8);
+
+        return day + "." + month + "." + year;
     }
 }

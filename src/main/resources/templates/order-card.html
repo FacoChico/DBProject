@@ -10,10 +10,11 @@
 
 <body>
 <!-- Шапка страницы -->
-<header th:insert="/blocks/header :: header"></header>
+<header th:insert="blocks/header :: header"></header>
 
 <!-- Тело страницы -->
 <div class="container mt-4 forText" style="min-height: 600px">
+    <input id="clientId" type="text" th:value="${clientId}" style="display: none;">
     <div class="row g-5">
         <div class="col-md-5 col-lg-4">
             <img th:src="@{'data:image/png;base64, ' + ${orderPhoto}}" onerror="this.src='/images/defaultOrder.jpeg';" alt="sorry" class="rounded img-thumbnail">
@@ -23,7 +24,7 @@
             <form class="needs-validation" novalidate="" method="post">
                 <div style="display: grid; grid-template-columns: 4fr 1fr;">
                     <div th:each="el : ${client}">
-                        <h3 th:text="'Заказ клиента ' + ${el.name} + ' ' + ${el.surname}"/>
+                        <h3 th:text="'Заказ клиента ' + ${el.name} + ' ' + ${el.surname}" onclick="headToClientCard();"/>
                     </div>
                     <div th:each="el : ${order}">
                         <a th:href="'/client' + ${el.clientId} + '/order' + ${el.id} + '/edit'" class="w-100 btn btn-light forButtons">Редактировать</a>
@@ -37,23 +38,34 @@
                         <strong>Категория:</strong>
                         <span th:text="${el.category}"></span>
                     </p>
+
                     <p>
                         <strong>Бренд:</strong>
                         <span th:text="${el.brand}"></span>
                     </p>
+
                     <p>
                         <strong>Размер:</strong>
                         <span th:text="${el.size}"></span>
                     </p>
+
                     <p>
                         <strong>Цвет:</strong>
                         <span th:text="${el.color}"></span>
                     </p>
+
+                    <p>
+                        <strong>Цена:</strong>
+                        <span th:text="${el.price}"></span>
+                    </p>
+
                     <p>
                         <strong>Дата оплаты заказа:</strong>
                         <span th:text="${el.orderDate}"></span>
                     </p>
+
                     <hr class="my-4">
+
                     <p>
                         <strong>Общее описание:</strong>
                         <span th:text="${el.description}"></span>
@@ -62,9 +74,18 @@
             </form>
         </div>
     </div>
+
+    <script>
+        function headToClientCard() {
+            const clientId = document.getElementById("clientId");
+            const redirectURL = "/client" + clientId.value;
+            window.location.replace(redirectURL);
+        }
+    </script>
+
 </div>
 
 <!-- Футер страницы -->
-<footer th:insert="/blocks/footer :: footer"></footer>
+<footer th:insert="blocks/footer :: footer"></footer>
 </body>
 </html>
