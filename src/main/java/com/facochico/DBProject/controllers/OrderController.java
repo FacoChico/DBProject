@@ -91,7 +91,8 @@ public class OrderController {
         Optional<ClientOrder> order = orderRepository.findById(orderId);
         ArrayList<ClientOrder> res2 = new ArrayList<>();
         order.ifPresent(res2::add);
-        res2.get(0).setOrderDate(parseDate(res2.get(0).getOrderDate()));
+        if (!res2.get(0).getOrderDate().isEmpty())
+            res2.get(0).setOrderDate(parseDate(res2.get(0).getOrderDate()));
         model.addAttribute("order", res2);
 
         return "order-card";

@@ -28,10 +28,6 @@
                 <div class="col-sm-6">
                     <label for="firstNameId" class="form-label">Имя</label>
                     <input type="text" name="name" class="form-control" id="firstNameId" maxlength="20">
-
-                    <div class="invalid-feedback">
-                        Введите корректное имя
-                    </div>
                 </div>
 
                 <div class="col-sm-6">
@@ -43,7 +39,28 @@
                     <label for="lastNameId" class="form-label">Фамилия</label>
                     <input type="text" name="surname" class="form-control" id="lastNameId" maxlength="20">
                 </div>
+            </div>
 
+            <hr class="my-4">
+
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <label for="typeId" class="form-label">Тип клиента</label>
+
+                    <select required name="type" class="form-control" id="typeId">
+                        <option value="">Не выбран</option>
+                        <option value="Вип">Вип</option>
+                        <option value="Постоянный клиент">Постоянный клиент</option>
+                        <option value="Новый клиент">Новый клиент</option>
+                        <option value="Потерянный вип клиент">Потерянный вип клиент</option>
+                        <option value="Потерянный постоянный клиент">Потерянный постоянный клиент</option>
+                        <option value="Давно потерянный клиент">Давно потерянный клиент</option>
+                    </select>
+
+                    <div class="invalid-feedback">
+                        ТИП ПОЛЬЗОВАТЕЛЯ
+                    </div>
+                </div>
             </div>
 
             <hr class="my-4">
@@ -124,6 +141,7 @@
             const lastName = document.getElementById('lastNameId');
             const sex = document.getElementById('sexId');
             const socialStatus = document.getElementById('socialStatusId');
+            const type = document.getElementById('typeId');
             const phoneNumber = document.getElementById('phoneNumberId');
             const birthDay = document.getElementById('birthDayId');
             const footSize = document.getElementById('footSizeId');
@@ -138,6 +156,7 @@
             formData.append("lastName", lastName.value);
             formData.append("sex", sex.value);
             formData.append("socialStatus", socialStatus.value);
+            formData.append("type", type.value);
             formData.append("phoneNumber", phoneNumber.value);
             formData.append("birthDay", birthDay.value);
             formData.append("footSize", footSize.value);

@@ -12,6 +12,7 @@ public class AdditionalClientInfo {
     private Long id;
 
     private String socialStatus;
+    private String type;
     private String clothSize;
     private String footSize;
     private String lastMsg;
@@ -22,9 +23,10 @@ public class AdditionalClientInfo {
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] clientPhoto;
 
-    public AdditionalClientInfo(Long id, String socialStatus, String clothSize, String footSize, String lastMsg, String lastPurchase, String description, byte[] clientPhoto) {
+    public AdditionalClientInfo(Long id, String socialStatus, String type, String clothSize, String footSize, String lastMsg, String lastPurchase, String description, byte[] clientPhoto) {
         this.id = id;
         this.socialStatus = socialStatus;
+        this.type = type;
         this.clothSize = clothSize;
         this.footSize = footSize;
         this.lastMsg = lastMsg;
@@ -50,6 +52,14 @@ public class AdditionalClientInfo {
 
     public void setSocialStatus(String socialStatus) {
         this.socialStatus = socialStatus;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getClothSize() {

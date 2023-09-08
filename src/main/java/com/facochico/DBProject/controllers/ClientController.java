@@ -36,8 +36,24 @@ public class ClientController {
 
         model.addAttribute("title", "Главный экран");
 
+//        String[] types = {"Вип","Постоянный клиент", "Новый клиент",
+//                "Потерянный вип клиент", "Потерянный постоянный клиент", "Давно потерянный клиент"};
+
         Iterable<Client> clients = clientRepository.findAll();
         Iterable<AdditionalClientInfo> additionalClientInfos = additionalClientInfoRepository.findAll();
+
+//        List<Iterable<Client>> clientList;
+//
+//        for (String el:types) {
+//            Iterable<Client> tempClient;
+//            List<AdditionalClientInfo> tempInfo = additionalClientInfoRepository.findByType(el);
+//
+//            for (AdditionalClientInfo info : tempInfo) {
+//              Optional<Client> tempClient2 = clientRepository.findById(info.getId());
+//              //???
+//            }
+//        }
+
         model.addAttribute("clients", clients);
         model.addAttribute("additionalClientInfos", additionalClientInfos);
 
@@ -55,9 +71,10 @@ public class ClientController {
     public String addClient(@RequestParam("firstName") String name, @RequestParam("patronymic") String patronymic,
                             @RequestParam("lastName") String surname, @RequestParam("sex") String sex,
                             @RequestParam("phoneNumber") String phoneNumber, @RequestParam("birthDay") String bDay,
-                            @RequestParam("socialStatus") String socialStatus, @RequestParam("clothSize") String clothSize,
-                            @RequestParam("footSize") String footSize, @RequestParam("lastMsg") String lastMsg,
-                            @RequestParam("lastPurchaseDate") String lastPurchase, @RequestParam("description") String description,
+                            @RequestParam("socialStatus") String socialStatus, @RequestParam("type") String type,
+                            @RequestParam("clothSize") String clothSize, @RequestParam("footSize") String footSize,
+                            @RequestParam("lastMsg") String lastMsg, @RequestParam("lastPurchaseDate") String lastPurchase,
+                            @RequestParam("description") String description,
                             @RequestParam(value = "file", required = false) MultipartFile file) {
 
         Client client = new Client(name, patronymic, surname, sex, phoneNumber, bDay);
@@ -79,7 +96,7 @@ public class ClientController {
         }
 
         AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), socialStatus,
-                clothSize, footSize, lastMsg, lastPurchase, description, clientPhoto);
+                type, clothSize, footSize, lastMsg, lastPurchase, description, clientPhoto);
         additionalClientInfoRepository.save(additionalClientInfo);
 
 
@@ -105,7 +122,8 @@ public class ClientController {
         ArrayList<Client> res = new ArrayList<>();
         client.ifPresent(res::add);
         // Приведение даты в формат дд/мм/гггг
-        res.get(0).setBDay(parseDate(res.get(0).getBDay()));
+        if (!res.get(0).getBDay().isEmpty())
+            res.get(0).setBDay(parseDate(res.get(0).getBDay()));
 
         model.addAttribute("client", res);
 
@@ -113,8 +131,10 @@ public class ClientController {
         ArrayList<AdditionalClientInfo> res2 = new ArrayList<>();
         additionalClientInfo.ifPresent(res2::add);
         // Приведение даты в формат дд/мм/гггг
-        res2.get(0).setLastMsg(parseDate(res2.get(0).getLastMsg()));
-        res2.get(0).setLastPurchase(parseDate(res2.get(0).getLastPurchase()));
+        if (!res2.get(0).getLastMsg().isEmpty()) {
+            res2.get(0).setLastMsg(parseDate(res2.get(0).getLastMsg()));
+            res2.get(0).setLastPurchase(parseDate(res2.get(0).getLastPurchase()));
+        }
 
         model.addAttribute("additionalClientInfo", res2);
 
@@ -159,9 +179,10 @@ public class ClientController {
                                @RequestParam("firstName") String name, @RequestParam("patronymic") String patronymic,
                                @RequestParam("lastName") String surname, @RequestParam("sex") String sex,
                                @RequestParam("phoneNumber") String phoneNumber, @RequestParam("birthDay") String bDay,
-                               @RequestParam("socialStatus") String socialStatus, @RequestParam("clothSize") String clothSize,
-                               @RequestParam("footSize") String footSize, @RequestParam("lastMsg") String lastMsg,
-                               @RequestParam("lastPurchaseDate") String lastPurchase, @RequestParam("description") String description,
+                               @RequestParam("socialStatus") String socialStatus, @RequestParam("type") String type,
+                               @RequestParam("clothSize") String clothSize, @RequestParam("footSize") String footSize,
+                               @RequestParam("lastMsg") String lastMsg, @RequestParam("lastPurchaseDate") String lastPurchase,
+                               @RequestParam("description") String description,
                                @RequestParam(value = "file", required = false) MultipartFile file) {
 
         Client client = clientRepository.findById(id).orElseThrow(); // orElseThrow() выбрасывает исключение в случае, если запись была не найдена
@@ -192,6 +213,7 @@ public class ClientController {
         }
 
         additionalClientInfo.setSocialStatus(socialStatus);
+        additionalClientInfo.setType(type);
         additionalClientInfo.setClothSize(clothSize);
         additionalClientInfo.setFootSize(footSize);
         additionalClientInfo.setLastMsg(lastMsg);

@@ -28,6 +28,13 @@
 
                 <hr class="my-4">
 
+                <div th:each="el : ${additionalClientInfo}">
+                    <p>
+                        <strong>Тип клиента:</strong>
+                        <span th:text="${el.type}"></span>
+                    </p>
+                </div>
+
                 <div th:each="el : ${client}">
                     <p>
                         <strong>Номер телефона:</strong>
