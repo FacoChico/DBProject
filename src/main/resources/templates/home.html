@@ -30,27 +30,33 @@
                     </div>
                 </form>
 
-<!--                <div th: th:each="">-->
+
                     <div class="table-responsive small mt-3">
-                        <table class="table table-hover table-striped table-sm forTables">
+                        <table class="table table-hover table-sm forTables">
                             <thead>
-                                <tr>
-                                    <th scope="col">ФИО</th>
-                                    <th scope="col">Номер телефона</th>
-                                </tr>
+                            <tr>
+                                <th scope="col">ФИО</th>
+                                <th scope="col">Номер телефона</th>
+                            </tr>
                             </thead>
 
-                            <tbody>
-                                <div th:each="el : ${clients}">
-                                    <tr th:clientHref="'client' + ${el.id}" style="cursor: pointer">
-                                        <td th:text="${el.name} + ' ' + ${el.patronymic} + ' ' + ${el.surname}"/>
-                                        <td th:text="${el.phoneNumber}"/>
+                            <div th:each="el : ${mapTypes}">
+
+                                <td colspan="2" style="background-color: rgba(138,138,138,0.33); font-weight: bold" th:text="${el.getKey()}"></td>
+
+                                <tbody>
+
+                                <div th:each="el2 : ${el.getValue()}">
+                                    <tr th:clientHref="'client' + ${el2.id}" style="cursor: pointer">
+                                        <td th:text="${clientsById.get(el2.id).surname + ' ' + clientsById.get(el2.id).name + ' ' + clientsById.get(el2.id).patronymic}"/>
+                                        <td th:text="${clientsById.get(el2.id).phoneNumber}"/>
                                     </tr>
                                 </div>
-                            </tbody>
+
+                                </tbody>
+                            </div>
                         </table>
                     </div>
-<!--                </div>-->
             </main>
         </div>
     </div>

@@ -46,8 +46,7 @@
             <div class="row g-3">
                 <div class="col-sm-6">
                     <label for="typeId" class="form-label">Тип клиента</label>
-
-                    <select required name="type" class="form-control" id="typeId">
+                    <select name="type" class="form-control" id="typeId">
                         <option value="">Не выбран</option>
                         <option value="Вип">Вип</option>
                         <option value="Постоянный клиент">Постоянный клиент</option>
@@ -128,7 +127,7 @@
             <h4 class="mb-3">Общее описание</h4>
             <textarea name="description" class="form-control" id="descriptionId" rows="10" maxlength="4000"></textarea><br>
 
-            <button class="w-100 btn btn-light forButtons" onclick="addClient();">Добавить клиента</button>
+            <button class="w-100 btn btn-light forButtons" onclick="validateSelect()">Добавить клиента</button>
         </div>
     </div>
 
@@ -172,6 +171,24 @@
             });
 
             window.location.replace("/");
+        }
+
+        function validateSelect() {
+            var nameField = document.getElementById("firstNameId");
+            var selValue = nameField.value;
+
+            var selectField = document.getElementById("typeId");
+            var selectedValue = selectField.value;
+
+            if (selValue === "") {
+                alert("Пожалуйста, введите имя");
+            } else {
+                if (selectedValue === "") {
+                    alert("Пожалуйста, выберите тип клиента");
+                } else {
+                    return addClient();
+                }
+            }
         }
     </script>
 

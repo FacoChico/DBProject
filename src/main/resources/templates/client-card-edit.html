@@ -55,17 +55,17 @@
                     <hr class="my-4">
 
                     <div class="row g-3">
+
                         <div class="col-sm-6">
                             <label for="typeId" class="form-label">Тип клиента</label>
 
                             <select required name="type" class="form-control" id="typeId">
-                                <option value="">Не выбран</option>
-                                <option value="Вип">Вип</option>
-                                <option value="Постоянный клиент">Постоянный клиент</option>
-                                <option value="Новый клиент">Новый клиент</option>
-                                <option value="Потерянный вип клиент">Потерянный вип клиент</option>
-                                <option value="Потерянный постоянный клиент">Потерянный постоянный клиент</option>
-                                <option value="Давно потерянный клиент">Давно потерянный клиент</option>
+                                <option value="Вип" th:selected="${elAddit.type =='Вип'}">Вип</option>
+                                <option value="Постоянный клиент" th:selected="${elAddit.type =='Постоянный клиент'}">Постоянный клиент</option>
+                                <option value="Новый клиент" th:selected="${elAddit.type =='Новый клиент'}">Новый клиент</option>
+                                <option value="Потерянный вип клиент" th:selected="${elAddit.type =='Потерянный вип клиент'}">Потерянный вип клиент</option>
+                                <option value="Потерянный постоянный клиент" th:selected="${elAddit.type =='Потерянный постоянный клиент'}">Потерянный постоянный клиент</option>
+                                <option value="Давно потерянный клиент" th:selected="${elAddit.type =='Давно потерянный клиент'}">Давно потерянный клиент</option>
                             </select>
 
                             <div class="invalid-feedback">

@@ -17,10 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class ClientController {
@@ -36,26 +33,34 @@ public class ClientController {
 
         model.addAttribute("title", "Главный экран");
 
-//        String[] types = {"Вип","Постоянный клиент", "Новый клиент",
-//                "Потерянный вип клиент", "Потерянный постоянный клиент", "Давно потерянный клиент"};
+        String[] types = {"Вип","Постоянный клиент", "Новый клиент",
+                "Потерянный вип клиент", "Потерянный постоянный клиент", "Давно потерянный клиент"};
+
+        String[] typesforOut = {"Вип клиенты","Постоянные клиенты", "Новые клиенты",
+                "Потерянные вип клиенты", "Потерянные постоянные клиенты", "Давно потерянные клиенты"};
 
         Iterable<Client> clients = clientRepository.findAll();
-        Iterable<AdditionalClientInfo> additionalClientInfos = additionalClientInfoRepository.findAll();
 
-//        List<Iterable<Client>> clientList;
-//
-//        for (String el:types) {
-//            Iterable<Client> tempClient;
-//            List<AdditionalClientInfo> tempInfo = additionalClientInfoRepository.findByType(el);
-//
-//            for (AdditionalClientInfo info : tempInfo) {
-//              Optional<Client> tempClient2 = clientRepository.findById(info.getId());
-//              //???
-//            }
-//        }
+        Map<String, List> mapTypes = new LinkedHashMap<>(); // Создали словарь с ключом - типом клиента и значением - списком клиентов
 
-        model.addAttribute("clients", clients);
-        model.addAttribute("additionalClientInfos", additionalClientInfos);
+        int i = 0;
+        for (String type : types) {
+            List<AdditionalClientInfo> temp = additionalClientInfoRepository.findByType(type);
+            mapTypes.put(typesforOut[i], temp);
+
+            if (temp.isEmpty()) {
+                mapTypes.remove(typesforOut[i]);
+            }
+            i += 1;
+        }
+
+        Map<Long, Client> clientsById = new HashMap<>(); // Map с id клиента и объектом client - для вывода на экран имени и тд
+        for (Client client : clients) {
+            clientsById.put(client.getId(), client);
+        }
+
+        model.addAttribute("clientsById", clientsById);
+        model.addAttribute("mapTypes", mapTypes);
 
         return "home";
     }
