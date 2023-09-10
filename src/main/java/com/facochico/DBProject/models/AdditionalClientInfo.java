@@ -17,19 +17,21 @@ public class AdditionalClientInfo {
     private String footSize;
     private String lastMsg;
     private String lastPurchase;
+    private String address;
     @Column(columnDefinition = "TEXT")
     private String description;
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] clientPhoto;
 
-    public AdditionalClientInfo(Long id, String socialStatus, String type, String clothSize, String footSize, String lastMsg, String lastPurchase, String description, byte[] clientPhoto) {
+    public AdditionalClientInfo(Long id, String socialStatus, String type, String clothSize, String footSize, String lastMsg, String lastPurchase, String address, String description, byte[] clientPhoto) {
         this.id = id;
         this.socialStatus = socialStatus;
         this.type = type;
         this.clothSize = clothSize;
         this.footSize = footSize;
         this.lastMsg = lastMsg;
+        this.address = address;
         this.description = description;
         this.lastPurchase = lastPurchase;
         this.clientPhoto = clientPhoto;
@@ -94,6 +96,12 @@ public class AdditionalClientInfo {
         this.lastPurchase = lastPurchase;
     }
 
+    public String getAddress() {
+        return address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
     public String getDescription() {
         return description;
     }

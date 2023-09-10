@@ -68,9 +68,6 @@
                                 <option value="Давно потерянный клиент" th:selected="${elAddit.type =='Давно потерянный клиент'}">Давно потерянный клиент</option>
                             </select>
 
-                            <div class="invalid-feedback">
-                                ТИП ПОЛЬЗОВАТЕЛЯ
-                            </div>
                         </div>
                     </div>
 
@@ -140,6 +137,15 @@
 
                 <hr class="my-4">
 
+                <div class="row g-3">
+                    <div class="col-sm-12">
+                        <label for="addressId" class="form-label">Адрес</label>
+                        <input type="text" th:value="${el.address}" name="address" class="form-control" id="addressId">
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
                 <h4 class="mb-3">Общее описание</h4>
                 <textarea name="description" th:text="${el.description}" class="form-control" id="descriptionId" rows="10" maxlength="4000"></textarea><br>
             </div>
@@ -187,6 +193,7 @@
             const clothSize = document.getElementById('clothSizeId');
             const lastMsg = document.getElementById('lastMsgId');
             const lastPurchaseDate = document.getElementById('lastPurchaseDateId');
+            const address = document.getElementById('addressId');
             const description = document.getElementById('descriptionId');
             let fileUpload = document.getElementById('fileUploadId')
 
@@ -203,6 +210,7 @@
             formData.append("clothSize", clothSize.value);
             formData.append("lastMsg", lastMsg.value);
             formData.append("lastPurchaseDate", lastPurchaseDate.value);
+            formData.append("address", address.value);
             formData.append("description", description.value);
             formData.append("file", fileUpload.files[0]);
 

@@ -79,7 +79,7 @@ public class ClientController {
                             @RequestParam("socialStatus") String socialStatus, @RequestParam("type") String type,
                             @RequestParam("clothSize") String clothSize, @RequestParam("footSize") String footSize,
                             @RequestParam("lastMsg") String lastMsg, @RequestParam("lastPurchaseDate") String lastPurchase,
-                            @RequestParam("description") String description,
+                            @RequestParam("address") String address, @RequestParam("description") String description,
                             @RequestParam(value = "file", required = false) MultipartFile file) {
 
         Client client = new Client(name, patronymic, surname, sex, phoneNumber, bDay);
@@ -101,7 +101,7 @@ public class ClientController {
         }
 
         AdditionalClientInfo additionalClientInfo = new AdditionalClientInfo(client.getId(), socialStatus,
-                type, clothSize, footSize, lastMsg, lastPurchase, description, clientPhoto);
+                type, clothSize, footSize, lastMsg, lastPurchase, address, description, clientPhoto);
         additionalClientInfoRepository.save(additionalClientInfo);
 
 
@@ -187,7 +187,7 @@ public class ClientController {
                                @RequestParam("socialStatus") String socialStatus, @RequestParam("type") String type,
                                @RequestParam("clothSize") String clothSize, @RequestParam("footSize") String footSize,
                                @RequestParam("lastMsg") String lastMsg, @RequestParam("lastPurchaseDate") String lastPurchase,
-                               @RequestParam("description") String description,
+                               @RequestParam("address") String address, @RequestParam("description") String description,
                                @RequestParam(value = "file", required = false) MultipartFile file) {
 
         Client client = clientRepository.findById(id).orElseThrow(); // orElseThrow() выбрасывает исключение в случае, если запись была не найдена
@@ -223,6 +223,7 @@ public class ClientController {
         additionalClientInfo.setFootSize(footSize);
         additionalClientInfo.setLastMsg(lastMsg);
         additionalClientInfo.setLastPurchase(lastPurchase);
+        additionalClientInfo.setAddress(address);
         additionalClientInfo.setDescription(description);
 
         if (clientPhoto != null)

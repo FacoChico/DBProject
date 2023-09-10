@@ -111,6 +111,15 @@
             <hr class="my-4">
 
             <div class="row g-3">
+                <div class="col-sm-12">
+                    <label for="addressId" class="form-label">Адрес</label>
+                    <input type="text" name="address" class="form-control" id="addressId" maxlength="128">
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row g-3">
                 <div class="col-sm-6">
                     <label for="lastMsgId" class="form-label">Дата последнего сообщения</label>
                     <input type="date" name="lastMsg" class="form-control" id="lastMsgId">
@@ -147,6 +156,7 @@
             const clothSize = document.getElementById('clothSizeId');
             const lastMsg = document.getElementById('lastMsgId');
             const lastPurchaseDate = document.getElementById('lastPurchaseDateId');
+            const address = document.getElementById('addressId');
             const description = document.getElementById('descriptionId');
             let fileUpload = document.getElementById('fileUploadId')
 
@@ -162,6 +172,7 @@
             formData.append("clothSize", clothSize.value);
             formData.append("lastMsg", lastMsg.value);
             formData.append("lastPurchaseDate", lastPurchaseDate.value);
+            formData.append("address", address.value);
             formData.append("description", description.value);
             formData.append("file", fileUpload.files[0]);
 
